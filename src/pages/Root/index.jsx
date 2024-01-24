@@ -1,7 +1,9 @@
-export default function Root({ children }) {
+import { Outlet } from 'react-router-dom';
+
+export default function Root() {
   return (
     <div>
-      {children}
+      <Outlet />
     </div>
   )
 }

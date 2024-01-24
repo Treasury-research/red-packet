@@ -7,9 +7,9 @@ import Claim from '@/pages/Claim';
 export const router = createBrowserRouter([
   {
     path: '/',
-    // element: <Root />,
+    element: <Root />,
     children: [
-      { path: '/home', element: <Home /> },
+      { path: '/', element: <Home /> },
       { path: '/send', element: <Send /> },
       { path: '/claim', element: <Claim /> },
     ],
