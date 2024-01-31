@@ -4,10 +4,26 @@ import LogoIcon from "@/Components/Icons/Logo"
 import SignInIcon from "@/Components/Icons/SignIn"
 import BackIcon from "@/Components/Icons/Back"
 import GiftImage from "@/assets/images/gift.png"
+import { useSDK } from '@metamask/sdk-react'
 
 export default function Home() {
   const [isSignedIn, setIsSignedIn] = useState(false)
   const [isShowRules, setIsShowRules] = useState(false)
+  const [account, setAccount] = useState('')
+  const { sdk, connected, connecting, provider, chainId } = useSDK()
+
+  const connect = async () => {
+    try {
+      const accounts = await sdk.connect()
+      console.log('accounts', accounts)
+      setAccount(accounts[0])
+      atler('Connected Account:', account)
+    } catch(err) {
+      console.warn(`failed to connect..`, err)
+    }
+  }
+
+  console.log('account', account)
 
   if (isShowRules) {
     return (
@@ -133,7 +149,7 @@ export default function Home() {
               </Box>
             </Box>
             <Box width="100%" marginBottom="40px" marginTop="auto">
-              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={() => setIsSignedIn(true)}>
+              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={connect} loading={connecting} disabled={connecting}>
                 <Box marginRight="8px"><SignInIcon /></Box>
                 Sign in
               </Button>

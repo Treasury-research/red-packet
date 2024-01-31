@@ -64,7 +64,6 @@ export default function Home() {
               >
                 <Box
                   fontSize="32px"
-                  fontWeight="600"
                   color="white"
                   marginBottom="20px"
                   fontWeight="bold"
@@ -146,7 +145,6 @@ export default function Home() {
             >
               <Box
                 fontSize="32px"
-                fontWeight="600"
                 color="white"
                 marginBottom="20px"
                 fontWeight="bold"
