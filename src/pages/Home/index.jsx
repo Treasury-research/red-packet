@@ -9,7 +9,7 @@ import { useSDK } from '@metamask/sdk-react'
 export default function Home() {
   const [isSignedIn, setIsSignedIn] = useState(false)
   const [isShowRules, setIsShowRules] = useState(false)
-  const [account, setAccount] = useState('')
+  const [account, setAccount] = useState('test')
   const { sdk, connected, connecting, provider, chainId } = useSDK()
 
   const connect = async () => {
@@ -109,7 +109,7 @@ export default function Home() {
             alignItems="center"
             justifyContent="center"
           >
-            Digital gifts
+            Digital gifts ({account})
           </Box>
         </Box>
         <Box
