@@ -5,6 +5,7 @@ import SignInIcon from "@/Components/Icons/SignIn"
 import BackIcon from "@/Components/Icons/Back"
 import GiftImage from "@/assets/images/gift.png"
 import { useSDK } from '@metamask/sdk-react'
+import { redPacketApi } from '@/api'
 
 export default function Home() {
   const [isSignedIn, setIsSignedIn] = useState(false)
