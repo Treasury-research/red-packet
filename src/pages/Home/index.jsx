@@ -36,7 +36,7 @@ export default function Home() {
     try {
       const userInfo = getUserInfo()
       const { initDataRaw } = userInfo
-      const res = await login({ webAppInitData: initDataRaw })
+      const res = await api.login({ webAppInitData: initDataRaw })
 
       updateUserInfo({
         token: JSON.stringify(res)
