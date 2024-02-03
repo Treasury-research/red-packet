@@ -15,7 +15,7 @@ export default function Home() {
   const [isLogingIn, setIsLogingIn] = useState(false)
   const [account, setAccount] = useState('test')
   const { sdk, connected, connecting, provider, chainId } = useSDK()
-  const { userInfo, updateUserInfo } = useUserStore()
+  const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
   console.log('userInfo', userInfo, connecting)
   const token = userInfo && userInfo.token
   const initDataRaw = userInfo && userInfo.initDataRaw
