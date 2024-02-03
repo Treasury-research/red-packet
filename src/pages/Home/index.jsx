@@ -41,6 +41,9 @@ export default function Home() {
         token: JSON.stringify(res)
       })
     } catch(err) {
+      updateUserInfo({
+        token: err.message
+      })
       console.warn(`failed to connect..`, err)
     }
   }, [])
