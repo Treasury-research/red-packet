@@ -18,6 +18,7 @@ export default function Home() {
   const { userInfo, updateUserInfo } = useUserStore()
   console.log('userInfo', userInfo, connecting)
   const token = userInfo && userInfo.token
+  const initDataRaw = userInfo && userInfo.initDataRaw
 
   const connect = async () => {
     try {
@@ -172,7 +173,12 @@ export default function Home() {
                 </Box>
               </Box>
             </Box>
-            <Box>{token}</Box>
+            <Box color="white">
+              {initDataRaw}
+            </Box>
+            <Box color="white">
+              {token}
+            </Box>
             <Box width="100%" marginBottom="40px" marginTop="auto">
               <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={signIn} loading={isLogingIn} disabled={isLogingIn}>
                 <Box marginRight="8px"><SignInIcon /></Box>
