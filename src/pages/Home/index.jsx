@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Box, Image, Button } from '@chakra-ui/react'
 import LogoIcon from "@/Components/Icons/Logo"
 import SignInIcon from "@/Components/Icons/SignIn"
@@ -6,25 +6,44 @@ import BackIcon from "@/Components/Icons/Back"
 import GiftImage from "@/assets/images/gift.png"
 import { useSDK } from '@metamask/sdk-react'
 import { redPacketApi } from '@/api'
+import { useUserStore } from '@/store/user'
+import * as api from '@/api'
 
 export default function Home() {
   const [isSignedIn, setIsSignedIn] = useState(false)
   const [isShowRules, setIsShowRules] = useState(false)
+  const [isLogingIn, setIsLogingIn] = useState(false)
   const [account, setAccount] = useState('test')
   const { sdk, connected, connecting, provider, chainId } = useSDK()
+  const { userInfo, updateUserInfo } = useUserStore()
+  console.log('userInfo', userInfo, connecting)
+  const token = userInfo && userInfo.token
 
   const connect = async () => {
     try {
       const accounts = await sdk.connect()
-      console.log('accounts', accounts)
-      setAccount(accounts[0])
-      atler('Connected Account:', account)
+
+      updateUserInfo({
+        address: accounts[0]
+      })
     } catch(err) {
       console.warn(`failed to connect..`, err)
     }
   }
 
-  console.log('account', account)
+  const signIn = useCallback(async () => {
+    try {
+      const userInfo = getUserInfo()
+      const { initDataRaw } = userInfo
+      const res = await login({ webAppInitData: initDataRaw })
+
+      updateUserInfo({
+        token: JSON.stringify(res)
+      })
+    } catch(err) {
+      console.warn(`failed to connect..`, err)
+    }
+  }, [])
 
   if (isShowRules) {
     return (
@@ -110,7 +129,7 @@ export default function Home() {
             alignItems="center"
             justifyContent="center"
           >
-            Digital gifts ({account})
+            Digital gifts
           </Box>
         </Box>
         <Box
@@ -130,6 +149,7 @@ export default function Home() {
               background="linear-gradient(0deg, #1F2861 0%, #30486D 89.32%)"
               padding="20px"
               marginTop="40px"
+              marginBottom="40px"
             >
               <Box marginBottom="20px">
                 <LogoIcon />
@@ -143,14 +163,15 @@ export default function Home() {
                 Send Digital gifts to your friends !
               </Box>
               <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Box color="white" onClick={() => setIsShowRules(true)}>{`活动规则>`}</Box>
+                <Box color="white" cursor="pointer" onClick={() => setIsShowRules(true)}>{`活动规则>`}</Box>
                 <Box>
                   <Image src={GiftImage} />
                 </Box>
               </Box>
             </Box>
+            <Box>{token}</Box>
             <Box width="100%" marginBottom="40px" marginTop="auto">
-              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={connect} loading={connecting} disabled={connecting}>
+              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={signIn} loading={isLogingIn} disabled={isLogingIn}>
                 <Box marginRight="8px"><SignInIcon /></Box>
                 Sign in
               </Button>
@@ -203,6 +224,7 @@ export default function Home() {
             background="linear-gradient(0deg, #1F2861 0%, #30486D 89.32%)"
             padding="20px"
             marginTop="40px"
+            marginBottom="40px"
           >
             <Box marginBottom="20px">
               <LogoIcon />

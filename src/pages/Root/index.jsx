@@ -7,10 +7,12 @@ import {
   useMainButton,
   useBackButton,
   useInitData,
+  useInitDataRaw,
   DisplayGate,
 } from '@tma.js/sdk-react'
 import { useEffect, useMemo, useState } from 'react'
 import { redPacketApi } from '@/api'
+import { useUserStore } from '@/store/user'
 
 function MainButton() {
   const mb = useMainButton()
@@ -53,44 +55,23 @@ function MainButton() {
 }
 
 function InitData() {
+  const { userInfo, updateUserInfo } = useUserStore()
   const initData = useInitData()
+  const initDataRaw = useInitDataRaw()
 
-  const initDataJson = useMemo(() => {
-    if (!initData) {
-      return 'Init data is empty.'
-    }
-
-    const { authDate, chat, hash, canSendAfter, queryId, receiver, user, startParam } = initData
-
-    return JSON.stringify({
-      authDate,
-      chat,
-      hash,
-      canSendAfter,
-      queryId,
-      receiver,
-      user,
-      startParam,
-    }, null, ' ')
+  useEffect(() => {
+    updateUserInfo({
+      initDataRaw
+    })
   }, [initData])
 
   useEffect(() => {
-    console.log('initData', initData)
-    const main = async () => {
-      const result = await redPacketApi('GET', '/health', {})
-      console.log('result', result)
-    }
+    updateUserInfo({
+      initDataRaw
+    })
+  }, [initDataRaw])
 
-    main()
-  }, [initData])
-
-  return (
-    <pre>
-      <code>
-        {initDataJson}
-      </code>
-    </pre>
-  )
+  return null
 }
 
 function SDKProviderError({ error }) {
