@@ -174,7 +174,7 @@ export default function Root() {
             <Outlet />
           </Box>
         </Box>
-        <MainButton />
+        {/* <MainButton /> */}
         <InitData />
       </DisplayGate>
     </SDKProvider>
