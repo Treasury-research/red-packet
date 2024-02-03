@@ -7,6 +7,14 @@ import GiftImage from "@/assets/images/gift.png"
 import { useSDK } from '@metamask/sdk-react'
 import { redPacketApi } from '@/api'
 import { useUserStore } from '@/store/user'
+import {
+  SDKProvider,
+  useMainButton,
+  useBackButton,
+  useInitData,
+  useInitDataRaw,
+  DisplayGate,
+} from '@tma.js/sdk-react'
 import * as api from '@/api'
 
 export default function Home() {
@@ -17,8 +25,8 @@ export default function Home() {
   const { sdk, connected, connecting, provider, chainId } = useSDK()
   const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
   console.log('userInfo', userInfo, connecting)
-  const token = userInfo && userInfo.token
-  const initDataRaw = userInfo && userInfo.initDataRaw
+  const initData = useInitData()
+  const initDataRaw = useInitDataRaw()
 
   const connect = async () => {
     try {
@@ -174,10 +182,10 @@ export default function Home() {
               </Box>
             </Box>
             <Box color="white">
-              {initDataRaw}
+              initDataRaw: {userInfo && userInfo.initDataRaw} : {initDataRaw}
             </Box>
             <Box color="white">
-              {token}
+              {userInfo && userInfo.token}
             </Box>
             <Box width="100%" marginBottom="40px" marginTop="auto">
               <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={signIn} loading={isLogingIn} disabled={isLogingIn}>
