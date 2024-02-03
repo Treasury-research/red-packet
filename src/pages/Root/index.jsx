@@ -72,9 +72,11 @@ function InitData() {
   }, [initDataRaw])
 
   return (
-    <div>
-      initDataRaw: {initDataRaw}
-    </div>
+    <pre>
+      <code>
+        {initDataJson}:{initDataRaw}
+      </code>
+    </pre>
   )
 }
 
