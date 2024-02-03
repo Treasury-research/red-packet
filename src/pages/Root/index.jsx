@@ -71,7 +71,11 @@ function InitData() {
     })
   }, [initDataRaw])
 
-  return null
+  return (
+    <div>
+      initDataRaw: {initDataRaw}
+    </div>
+  )
 }
 
 function SDKProviderError({ error }) {
