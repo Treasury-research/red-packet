@@ -80,6 +80,6 @@ export const challenge = (params = {}) => redPacketApi('POST', '/auth/challenge'
 export const sign = (params = {}, options) => redPacketApi('POST', '/sign', params, options)
 export const refresh = (params = {}, options) => redPacketApi('POST', '/auth/refresh', params, options)
 export const bindAddress = (params = {}, options) => redPacketApi('POST', '/user/bindAddress', params, options)
-export const getClaimHistory = (params = {}) => redPacketApi('GET', '/user/claim', params, options)
+export const getClaimHistory = (params = {}, options) => redPacketApi('GET', '/user/claim', params, options)
 export const getUserInfo = (params = {}, options) => redPacketApi('GET', '/user/info', params, options)
 export const getRedPacket = ({ id }, options) => redPacketApi('GET', `/redpacket/${id}`, {}, options)
