@@ -8,9 +8,11 @@ import { useSDK } from '@metamask/sdk-react'
 import { redPacketApi } from '@/api'
 import { useUserStore } from '@/store/user'
 import ActivityRules from '@/pages/ActivityRules'
+import Send from '@/pages/Send'
 import * as api from '@/api'
 
 export default function Home() {
+  const [activePage, setActivePage] = useState('home')
   const [isShowRules, setIsShowRules] = useState(false)
   const [isLogingIn, setIsLogingIn] = useState(false)
   const [account, setAccount] = useState('test')
@@ -56,9 +58,15 @@ export default function Home() {
 
   }, [])
 
-  if (isShowRules) {
+  if (activePage === 'activityRules') {
     return (
-      <ActivityRules back={() => setIsShowRules(false)} />
+      <ActivityRules back={() => setActivePage('home')} />
+    )
+  }
+
+  if (activePage === 'send') {
+    return (
+      <Send back={() => setActivePage('home')} />
     )
   }
 
@@ -118,7 +126,7 @@ export default function Home() {
               Send Digital gifts to your friends !
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Box color="white" cursor="pointer" onClick={() => setIsShowRules(true)}>{`活动规则>`}</Box>
+              <Box color="white" cursor="pointer" onClick={() => setActivePage('activityRules')}>{`活动规则>`}</Box>
               <Box>
                 <Image src={GiftImage} />
               </Box>
@@ -135,7 +143,14 @@ export default function Home() {
           {!!isSignedIn && (
             <Box marginTop="auto">
               <Box width="100%" marginBottom="40px">
-                <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold">
+                <Button
+                  width="100%"
+                  borderRadius="50px"
+                  height="50px"
+                  fontSize="16px"
+                  fontWeight="bold"
+                  onClick={() => setActivePage('send')}
+                >
                   发群礼品
                 </Button>
               </Box>

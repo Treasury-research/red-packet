@@ -6,7 +6,7 @@ import BackIcon from "@/components/Icons/Back"
 import ArrowDownIcon from "@/components/Icons/ArrowDown"
 import GiftImage from "@/assets/images/gift-bg.png"
 
-export default function Send() {
+export default function Send({ back }) {
   const [isSentSuccess, setIsSentSuccess] = useState(false)
   const [showSelectNetwork, setShowSelectNetwork] = useState(false)
   const [showSelectToken, setShowSelectToken] = useState(false)
@@ -38,8 +38,32 @@ export default function Send() {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          padding="0 32px"
+          position="relative"
         >
-          Digital gifts
+          <Box
+            marginRight="auto"
+            onClick={back}
+            cursor="pointer"
+            position="absolute"
+            top="0"
+            left="32px"
+            height="100%"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <BackIcon />
+          </Box>
+          <Box
+            width="100%"
+            height="100%"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            Digital gifts
+          </Box>
         </Box>
       </Box>
       <Box
