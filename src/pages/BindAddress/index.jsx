@@ -1,12 +1,43 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Box, Image, Button } from '@chakra-ui/react'
 import LogoIcon from "@/components/Icons/Logo"
 import SignInIcon from "@/components/Icons/SignIn"
 import BackIcon from "@/components/Icons/Back"
 import GiftImage from "@/assets/images/gift.png"
+import { useSDK } from '@metamask/sdk-react'
+import * as api from '@/api'
+import { useUserStore } from '@/store/user'
 
 export default function Home() {
+  const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
+  const { sdk } = useSDK()
   const [isBind, setIsBind] = useState(false)
+
+  const bindAddress = useCallback(async () => {
+    const accounts = await sdk.connect()
+    const address = accounts[0]
+
+    const { token } = userInfo
+    const res1 = await api.challenge({ address }, {
+      requireAuth: true,
+      tokenFetcher: () => token
+    })
+
+    alert(JSON.stringify(res1))
+
+    /* const signature = await sdk?.connectAndSign({
+     *   msg: "Connect + Sign message",
+     * })
+
+     * const res2 = await api.bindAddress({
+     *   address,
+
+     * }, {
+     *   requireAuth: true,
+     *   tokenFetcher: () => token
+     * }) */
+
+  }, [userInfo])
 
   if (!isBind) {
     return (
@@ -81,7 +112,7 @@ export default function Home() {
               </Box>
             </Box>
             <Box width="100%" marginBottom="40px" marginTop="auto">
-              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={() => setIsBind(true)}>
+              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={bindAddress}>
                 去绑定
               </Button>
             </Box>
