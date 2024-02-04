@@ -7,6 +7,7 @@ import ArrowDownIcon from "@/components/Icons/ArrowDown"
 import GiftImage from "@/assets/images/gift-bg.png"
 import { useForm } from 'react-hook-form'
 import { useUserStore } from '@/store/user'
+import { Popup } from 'react-vant'
 
 export default function Send({ back }) {
   const [isSentSuccess, setIsSentSuccess] = useState(false)
@@ -117,6 +118,7 @@ export default function Send({ back }) {
               padding="0 20px"
               marginBottom="20px"
               cursor="pointer"
+              onClick={() => setShowSelectNetwork(!showSelectNetwork)}
             >
               <Box>
                 选择网络
@@ -247,6 +249,42 @@ export default function Send({ back }) {
           </Box>
         </Box>
       </Box>
+      <Popup
+        visible={showSelectNetwork}
+        position="bottom"
+        style={{
+          borderTopLeftRadius: '10px',
+          borderTopRightRadius: '10px',
+          //minHeight: '80px'
+        }}
+        onClose={() => setShowSelectNetwork(false)}
+      >
+        <Box
+          borderRadius="10px"
+          overflow="hidden"
+        >
+          <Box
+            width="100%"
+            height="20px"
+            padding="0"
+          />
+          <Box
+            onClick={() => setShowSelectNetwork(false)}
+            width="100%"
+            height="44px"
+            borderTop="1px solid #D8D8D8"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            fontWeight="500"
+            fontSize="16px"
+            cursor="pointer"
+            padding="0"
+          >
+            Cancel
+          </Box>
+        </Box>
+      </Popup>
     </Box>
   )
 }
