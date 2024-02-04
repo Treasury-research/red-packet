@@ -61,7 +61,7 @@ function InitData() {
 
   useEffect(() => {
     updateUserInfo({
-      initData
+      startParam: initData.startParam
     })
   }, [initData])
 
