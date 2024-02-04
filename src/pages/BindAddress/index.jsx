@@ -40,7 +40,7 @@ export default function Home() {
 
       const res3 = await api.getUserInfo({}, {
         requireAuth: true,
-        tokenFetcher: () => accessToken
+        tokenFetcher: () => token
       })
 
       updateUserInfo({
