@@ -25,11 +25,6 @@ export default function Home() {
         msg: message,
       })
 
-      const sign = await ethereum.request({
-        method: 'personal_sign',
-        params: [msg, from],
-      })
-
       alert(signature)
 
       /* const res2 = await api.bindAddress({
