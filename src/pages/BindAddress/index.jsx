@@ -17,6 +17,7 @@ export default function Home() {
 
   const bindAddress = useCallback(async () => {
     try {
+      const userInfo = getUserInfo()
       const accounts = await sdk.connect()
       const address = accounts[0]
 
@@ -51,7 +52,7 @@ export default function Home() {
     } catch (error) {
       alert(error.message)
     }
-  }, [userInfo, metamaskProvider])
+  }, [metamaskProvider])
 
   if (!isBind) {
     return (
