@@ -77,9 +77,9 @@ export const redPacketApi = apiCreator(`${SERVER_URL}/api/v1`, { responseTransfo
 
 export const login = (params = {}) => redPacketApi('POST', '/auth/login', params)
 export const challenge = (params = {}) => redPacketApi('POST', '/auth/challenge', params)
-export const sign = (params = {}) => redPacketApi('POST', '/sign', params)
-export const refresh = (params = {}) => redPacketApi('POST', '/auth/refresh', params)
-export const bindAddress = (params = {}) => redPacketApi('POST', '/user/bindAddress', params)
+export const sign = (params = {}, options) => redPacketApi('POST', '/sign', params)
+export const refresh = (params = {}, options) => redPacketApi('POST', '/auth/refresh', params)
+export const bindAddress = (params = {}, options) => redPacketApi('POST', '/user/bindAddress', params)
 export const getClaimHistory = (params = {}) => redPacketApi('GET', '/user/claim', params)
 export const getUserInfo = (params = {}, options) => redPacketApi('GET', '/user/info', params, options)
-export const getRedPacket = ({ id }) => redPacketApi('GET', `/redpacket/${id}`, {})
+export const getRedPacket = ({ id }, options) => redPacketApi('GET', `/redpacket/${id}`, {})
