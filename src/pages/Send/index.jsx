@@ -5,15 +5,25 @@ import SignInIcon from "@/components/Icons/SignIn"
 import BackIcon from "@/components/Icons/Back"
 import ArrowDownIcon from "@/components/Icons/ArrowDown"
 import GiftImage from "@/assets/images/gift-bg.png"
+import { useForm } from 'react-hook-form'
+import { useUserStore } from '@/store/user'
 
 export default function Send({ back }) {
   const [isSentSuccess, setIsSentSuccess] = useState(false)
   const [showSelectNetwork, setShowSelectNetwork] = useState(false)
   const [showSelectToken, setShowSelectToken] = useState(false)
+  const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm()
 
   if (isSentSuccess) {
     return (
-      <Box></Box>
+      <Box>
+
+      </Box>
     )
   }
 
@@ -96,9 +106,7 @@ export default function Send({ back }) {
               TypoGraphy专属礼品
             </Box>
           </Box>
-          <Box
-            padding="20px 0"
-          >
+          <Box padding="20px 0">
             <Box
               background="white"
               borderRadius="40px"
@@ -151,7 +159,9 @@ export default function Send({ back }) {
                     textAlign="right"
                     outline="none"
                     borderWidth="0"
-                    boxShadow="none"
+                    boxShadow="none !important"
+                    border="none"
+                    {...register('amount')}
                   />
                 </Box>
               </Box>
@@ -195,8 +205,9 @@ export default function Send({ back }) {
                     textAlign="right"
                     outline="none"
                     borderWidth="0"
-                    boxShadow="none"
+                    boxShadow="none !important"
                     value="20"
+                    {...register('count')}
                   />
                 </Box>
               </Box>
@@ -219,6 +230,8 @@ export default function Send({ back }) {
                   outline="0"
                   border="0"
                   padding="0"
+                  boxShadow="none !important"
+                  {...register('memo')}
                 />
               </Box>
             </Box>
