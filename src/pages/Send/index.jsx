@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Box, Image, Button, Input } from '@chakra-ui/react'
 import LogoIcon from "@/components/Icons/Logo"
 import SignInIcon from "@/components/Icons/SignIn"
@@ -16,11 +16,13 @@ export default function Send({ back }) {
   const [showSelectNetwork, setShowSelectNetwork] = useState(false)
   const [showSelectToken, setShowSelectToken] = useState(false)
   const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
+  const form = useForm()
   const {
     register,
     handleSubmit,
-    formState: { errors }
-  } = useForm()
+    formState,
+    getValues,
+  } = form
 
   const selectNetwork = useCallback((info) => {
     setNetworkInfo(info)
@@ -30,6 +32,16 @@ export default function Send({ back }) {
   const selectToken = useCallback((info) => {
     setTokenInfo(info)
     setShowSelectToken(false)
+  }, [])
+
+  const onSubmit = useCallback((data) => {
+    console.log('onSubmit', data)
+  }, [networkInfo, tokenInfo])
+
+  useEffect(() => {
+    form.watch('amount', () => {
+
+    })
   }, [])
 
   if (isSentSuccess) {
@@ -101,177 +113,177 @@ export default function Send({ back }) {
           display="flex"
           flexDirection="column"
         >
-          <Box
-            width="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="column"
-          >
-            <Image src={GiftImage} />
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Box
-              fontSize="18px"
-              fontWeight="600"
-              color="white"
-              marginTop="20px"
-              marginBottom="20px"
-            >
-              TypoGraphy专属礼品
-            </Box>
-          </Box>
-          <Box padding="20px 0">
-            <Box
-              background="white"
-              borderRadius="40px"
+              width="100%"
               display="flex"
-              minHeight="40px"
               alignItems="center"
-              justifyContent="space-between"
-              padding="0 20px"
-              marginBottom="20px"
-              cursor="pointer"
-              onClick={() => setShowSelectNetwork(true)}
+              justifyContent="center"
+              flexDirection="column"
             >
-              <Box>
-                选择网络
+              <Image src={GiftImage} />
+              <Box
+                fontSize="18px"
+                fontWeight="600"
+                color="white"
+                marginTop="20px"
+                marginBottom="20px"
+              >
+                TypoGraphy专属礼品
               </Box>
-              <Box>
-                <Box position="relative" paddingRight="20px">
-                  {(networkInfo && networkInfo.name) ? (
-                    <Box>{networkInfo.name}</Box>
-                  ) : (
-                    <Box color="#A7A7A9">请选择</Box>
-                  )}
-                  <Box
-                    position="absolute"
-                    top="0"
-                    right="0"
-                    height="100%"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <ArrowDownIcon />
+            </Box>
+            <Box padding="20px 0">
+              <Box
+                background="white"
+                borderRadius="40px"
+                display="flex"
+                minHeight="40px"
+                alignItems="center"
+                justifyContent="space-between"
+                padding="0 20px"
+                marginBottom="20px"
+                cursor="pointer"
+                onClick={() => setShowSelectNetwork(true)}
+              >
+                <Box>
+                  选择网络
+                </Box>
+                <Box>
+                  <Box position="relative" paddingRight="20px">
+                    {(networkInfo && networkInfo.name) ? (
+                      <Box>{networkInfo.name}</Box>
+                    ) : (
+                      <Box color="#A7A7A9">请选择</Box>
+                    )}
+                    <Box
+                      position="absolute"
+                      top="0"
+                      right="0"
+                      height="100%"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <ArrowDownIcon />
+                    </Box>
                   </Box>
                 </Box>
               </Box>
-            </Box>
-            <Box
-              background="white"
-              borderRadius="40px"
-              display="flex"
-              minHeight="40px"
-              alignItems="center"
-              justifyContent="space-between"
-              padding="0 20px"
-              marginBottom="8px"
-            >
-              <Box width="calc(100% - 80px)" display="flex" alignItems="center">
-                <Box
-                  marginRight="auto"
-                  height="100%"
-                >
-                  总金额
-                </Box>
-                <Box width="50%">
-                  <Input
-                    textAlign="right"
-                    outline="none"
-                    borderWidth="0"
-                    boxShadow="none !important"
-                    border="none"
-                    placeholder="发多少"
-                    {...register('amount')}
-                  />
-                </Box>
-              </Box>
-              <Box>
-                <Box
-                  position="relative"
-                  paddingRight="20px"
-                  onClick={() => setShowSelectToken(true)}
-                  cursor="pointer"
-                >
-                  {(tokenInfo && tokenInfo.name) ? (
-                    <Box>{tokenInfo.name}</Box>
-                  ) : (
-                    <Box color="#A7A7A9">请选择</Box>
-                  )}
+              <Box
+                background="white"
+                borderRadius="40px"
+                display="flex"
+                minHeight="40px"
+                alignItems="center"
+                justifyContent="space-between"
+                padding="0 20px"
+                marginBottom="8px"
+              >
+                <Box width="calc(100% - 80px)" display="flex" alignItems="center">
                   <Box
-                    position="absolute"
-                    top="0"
-                    right="0"
+                    marginRight="auto"
                     height="100%"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
                   >
-                    <ArrowDownIcon />
+                    总金额
+                  </Box>
+                  <Box width="50%">
+                    <Input
+                      textAlign="right"
+                      outline="none"
+                      borderWidth="0"
+                      boxShadow="none !important"
+                      border="none"
+                      placeholder="发多少"
+                      {...register('amount')}
+                    />
+                  </Box>
+                </Box>
+                <Box>
+                  <Box
+                    position="relative"
+                    paddingRight="20px"
+                    onClick={() => setShowSelectToken(true)}
+                    cursor="pointer"
+                  >
+                    {(tokenInfo && tokenInfo.name) ? (
+                      <Box>{tokenInfo.name}</Box>
+                    ) : (
+                      <Box color="#A7A7A9">请选择</Box>
+                    )}
+                    <Box
+                      position="absolute"
+                      top="0"
+                      right="0"
+                      height="100%"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <ArrowDownIcon />
+                    </Box>
                   </Box>
                 </Box>
               </Box>
-            </Box>
-            <Box color="#A7A7A9" fontSize="14px" padding="0 20px" marginBottom="14px">可用余额: 0.0000000 {tokenInfo && tokenInfo.symbol}</Box>
-            <Box
-              background="white"
-              borderRadius="40px"
-              display="flex"
-              minHeight="40px"
-              alignItems="center"
-              justifyContent="space-between"
-              padding="0 20px"
-              marginBottom="8px"
-            >
-              <Box width="calc(100%)" display="flex" alignItems="center">
-                <Box
-                  marginRight="auto"
-                  height="100%"
-                >
-                  领取人数
+              <Box color="#A7A7A9" fontSize="14px" padding="0 20px" marginBottom="14px">可用余额: 0.0000000 {tokenInfo && tokenInfo.symbol}</Box>
+              <Box
+                background="white"
+                borderRadius="40px"
+                display="flex"
+                minHeight="40px"
+                alignItems="center"
+                justifyContent="space-between"
+                padding="0 20px"
+                marginBottom="8px"
+              >
+                <Box width="calc(100%)" display="flex" alignItems="center">
+                  <Box
+                    marginRight="auto"
+                    height="100%"
+                  >
+                    领取人数
+                  </Box>
+                  <Box width="50%">
+                    <Input
+                      textAlign="right"
+                      outline="none"
+                      borderWidth="0"
+                      boxShadow="none !important"
+                      placeholder="礼品发给几个人"
+                      {...register('count')}
+                    />
+                  </Box>
                 </Box>
-                <Box width="50%">
+              </Box>
+              <Box color="#A7A7A9" fontSize="14px" padding="0 20px" marginBottom="14px">每人领到随机金额，改为 <Box as="span" color="white">平均金额</Box></Box>
+              <Box
+                background="white"
+                borderRadius="10px"
+                display="flex"
+                minHeight="40px"
+                alignItems="center"
+                justifyContent="space-between"
+                padding="0 20px"
+              >
+                <Box width="calc(100%)" display="flex" alignItems="center" padding="20px 0">
                   <Input
-                    textAlign="right"
-                    outline="none"
-                    borderWidth="0"
+                    marginRight="auto"
+                    height="100%"
+                    outline="0"
+                    border="0"
+                    padding="0"
                     boxShadow="none !important"
-                    value="20"
-                    placeholder="礼品发给几个人"
-                    {...register('count')}
+                    {...register('memo')}
                   />
                 </Box>
               </Box>
             </Box>
-            <Box color="#A7A7A9" fontSize="14px" padding="0 20px" marginBottom="14px">每人领到随机金额，改为 <Box as="span" color="white">平均金额</Box></Box>
-            <Box
-              background="white"
-              borderRadius="10px"
-              display="flex"
-              minHeight="40px"
-              alignItems="center"
-              justifyContent="space-between"
-              padding="0 20px"
-            >
-              <Box width="calc(100%)" display="flex" alignItems="center" padding="20px 0">
-                <Input
-                  marginRight="auto"
-                  height="100%"
-                  value="祝你发财"
-                  outline="0"
-                  border="0"
-                  padding="0"
-                  boxShadow="none !important"
-                  {...register('memo')}
-                />
-              </Box>
+            <Box width="100%" marginBottom="40px" marginTop="auto" display="flex" flexDirection="column" alignItems="center">
+              <Box fontSize="30px" fontWeight="bold" color="white" marginBottom="10px">{getValues('amount') || '0.0000'} {tokenInfo && tokenInfo.symbol}</Box>
+              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" type="submit">
+                发礼品
+              </Button>
             </Box>
-          </Box>
-          <Box width="100%" marginBottom="40px" marginTop="auto" display="flex" flexDirection="column" alignItems="center">
-            <Box fontSize="30px" fontWeight="bold" color="white" marginBottom="10px">1.00 {tokenInfo && tokenInfo.symbol}</Box>
-            <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold">
-              发礼品
-            </Button>
-          </Box>
+          </form>
         </Box>
       </Box>
       <Popup
