@@ -16,8 +16,11 @@ export default function Home() {
 
   const bindAddress = useCallback(async () => {
     try {
-      const { account, token } = userInfo
-      const message = await api.challenge({ address: account }, {
+      const accounts = await sdk.connect()
+      const address = accounts[0]
+
+      const { token } = userInfo
+      const message = await api.challenge({ address }, {
         requireAuth: true,
         tokenFetcher: () => token
       })
