@@ -13,6 +13,7 @@ export default function Home() {
   const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
   const { provider: metamaskProvider, sdk } = useSDK()
   const [isBind, setIsBind] = useState(false)
+  const [signature, setSignature] = useState('')
 
   const bindAddress = useCallback(async () => {
     try {
@@ -28,6 +29,7 @@ export default function Home() {
       const provider = new ethers.BrowserProvider(metamaskProvider)
       const signer = await provider.getSigner()
       const signature = await signer.signMessage(message)
+      setSignature(`${signature}:${address}`)
 
       const res2 = await api.bindAddress({
         address,
@@ -99,6 +101,11 @@ export default function Home() {
             >
               <Box marginBottom="20px">
                 <LogoIcon />
+              </Box>
+              <Box
+                color="white"
+              >
+                {signature}
               </Box>
               <Box
                 width="100%"
