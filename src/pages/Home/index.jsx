@@ -9,6 +9,7 @@ import { redPacketApi } from '@/api'
 import { useUserStore } from '@/store/user'
 import ActivityRules from '@/pages/ActivityRules'
 import Send from '@/pages/Send'
+import BindAddress from '@/pages/BindAddress'
 import * as api from '@/api'
 
 export default function Home() {
@@ -67,6 +68,12 @@ export default function Home() {
   if (activePage === 'send') {
     return (
       <Send back={() => setActivePage('home')} />
+    )
+  }
+
+  if (userInfo && !userInfo.address) {
+    return (
+      <BindAddress />
     )
   }
 

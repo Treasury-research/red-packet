@@ -51,6 +51,7 @@ export default function Home() {
               background="linear-gradient(0deg, #1F2861 0%, #30486D 89.32%)"
               padding="20px"
               marginTop="40px"
+              marginBottom="40px"
             >
               <Box marginBottom="20px">
                 <LogoIcon />
