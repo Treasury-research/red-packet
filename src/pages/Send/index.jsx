@@ -17,7 +17,7 @@ export default function Send({ back }) {
   const [isSentSuccess, setIsSentSuccess] = useState(false)
   const [showSelectNetwork, setShowSelectNetwork] = useState(false)
   const [showSelectToken, setShowSelectToken] = useState(false)
-  const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
+  const { userInfo, updateUserInfo, getUserInfo, clearUserStore } = useUserStore()
   const [submiting, setSubmiting] = useState(false)
   const { provider: metamaskProvider, sdk } = useSDK()
   const form = useForm()
@@ -27,6 +27,10 @@ export default function Send({ back }) {
     formState,
     getValues,
   } = form
+
+  useEffect(() => {
+    clearUserStore()
+  }, [])
 
   const selectNetwork = useCallback((info) => {
     setNetworkInfo(info)
