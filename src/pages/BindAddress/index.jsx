@@ -18,18 +18,18 @@ export default function Home() {
     const address = accounts[0]
 
     const { token } = userInfo
-    const res1 = await api.challenge({ address }, {
+    const message = await api.challenge({ address }, {
       requireAuth: true,
       tokenFetcher: () => token
     })
 
-    alert(JSON.stringify(res1))
 
-    /* const signature = await sdk?.connectAndSign({
-     *   msg: "Connect + Sign message",
-     * })
+    const signature = await sdk.connectAndSign({
+      msg: message,
+    })
+    alert(signature)
 
-     * const res2 = await api.bindAddress({
+    /* const res2 = await api.bindAddress({
      *   address,
 
      * }, {
