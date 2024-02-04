@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Box, Image, Button, Input } from '@chakra-ui/react'
-import LogoIcon from "@/Components/Icons/Logo"
-import SignInIcon from "@/Components/Icons/SignIn"
-import BackIcon from "@/Components/Icons/Back"
-import ArrowDownIcon from "@/Components/Icons/ArrowDown"
+import LogoIcon from "@/components/Icons/Logo"
+import SignInIcon from "@/components/Icons/SignIn"
+import BackIcon from "@/components/Icons/Back"
+import ArrowDownIcon from "@/components/Icons/ArrowDown"
 import GiftImage from "@/assets/images/gift-bg.png"
 
 export default function Send() {
