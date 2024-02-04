@@ -46,7 +46,8 @@ export default function Home() {
       })
       console.log('res2', res2)
       updateUserInfo({
-        ...res2
+        ...res2,
+        token: accessToken
       })
       alert(JSON.stringify(res2))
     } catch(err) {
