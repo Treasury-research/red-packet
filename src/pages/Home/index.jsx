@@ -132,7 +132,7 @@ export default function Home() {
               </Box>
             </Box>
           </Box>
-          <Box>
+          <Box color="white">
             {JSON.stringify(userInfo)}
           </Box>
           {!isSignedIn && (
