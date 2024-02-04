@@ -38,7 +38,7 @@ export default function Home() {
     try {
       const userInfo = getUserInfo()
       const { initDataRaw } = userInfo
-      const res1 = await api.login({ webAppInitData: `user=%7B%22id%22%3A1960649593%2C%22first_name%22%3A%22T%22%2C%22last_name%22%3A%22T%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-8465888862239987465&chat_type=group&start_param=test&auth_date=1706944227&hash=5828659d81ad70d033f72569dbdbe98ef0fdf3a84b2003400c28cd0d244f39a5` })
+      const res1 = await api.login({ webAppInitData: initDataRaw })
       const { accessToken } = res1
       const res2 = await api.getUserInfo({}, {
         requireAuth: true,

@@ -47,8 +47,6 @@ export default function Home() {
       updateUserInfo({
         ...res3,
       })
-
-      alert(JSON.stringify(res2))
     } catch (error) {
       alert(error.message)
     }
