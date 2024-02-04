@@ -44,12 +44,11 @@ export default function Home() {
         requireAuth: true,
         tokenFetcher: () => accessToken
       })
-
       console.log('res2', res2)
-
       updateUserInfo({
         ...res2
       })
+      alert(JSON.stringify(res2))
     } catch(err) {
       console.warn(`failed to connect..`, err.message)
     }
@@ -138,9 +137,6 @@ export default function Home() {
                 <Image src={GiftImage} />
               </Box>
             </Box>
-          </Box>
-          <Box color="white">
-            {JSON.stringify(userInfo)}
           </Box>
           {!isSignedIn && (
             <Box width="100%" marginBottom="40px" marginTop="auto">
