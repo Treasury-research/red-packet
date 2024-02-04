@@ -9,7 +9,7 @@ import * as api from '@/api'
 import { useUserStore } from '@/store/user'
 import { ethers, BrowserProvider } from 'ethers'
 
-export default function Home() {
+export default function BindAddress({ back }) {
   const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
   const { provider: metamaskProvider, sdk } = useSDK()
   const [isBind, setIsBind] = useState(false)
@@ -47,6 +47,8 @@ export default function Home() {
       updateUserInfo({
         ...res3,
       })
+
+      back()
     } catch (error) {
       alert(error.message)
     }

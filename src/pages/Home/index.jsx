@@ -49,7 +49,6 @@ export default function Home() {
         ...res2,
         token: accessToken
       })
-      alert(JSON.stringify(res2))
     } catch(err) {
       console.warn(`failed to connect..`, err.message)
     }
@@ -73,7 +72,7 @@ export default function Home() {
 
   if (userInfo && userInfo.token && !userInfo.address) {
     return (
-      <BindAddress />
+      <BindAddress back={() => setActivePage('home')} />
     )
   }
 

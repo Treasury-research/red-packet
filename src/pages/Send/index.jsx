@@ -42,45 +42,65 @@ export default function Send({ back }) {
     setShowSelectToken(false)
   }, [])
 
-  const onSubmit = useCallback(async (data) => {
-    const provider = new ethers.BrowserProvider(metamaskProvider)
-    const signer = await provider.getSigner()
-    const address = "0xffdab174499b6515624f1043205cf21879f170a5";
+  async function approve(address, amount, signer) {
+    const contractAddress = "0xC666283f0A53C46141f509ed9241129622013d95";
     const abi = [
-      "function create_red_packet(uint256 _number, bool _ifrandom, uint256 _duration, bytes32 _seed, string _message, string _name, uint256 _token_type, address _token_addr, uint256 _total_tokens, string _chat_id) payable"
+      "function approve(address _spender, uint256 _value) returns (bool)"
     ];
-    const contract = new ethers.Contract(address, abi, signer);
-    const tx = await contract.functions.create_red_packet(
-      1,
-      1,
-      300,
-      '0xb4ea3b98caa0037b5a71b6a10179f2be9f9f3c3e1ce6e2ab635c1e07169cbd49',
-      11,
-      22,
-      1,
-      '0xD93658903F051092fC065415e721DF6f57fBe9Bb',
-      '1000000',
-      '-4050289260'
-    )
+
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    const tx = await contract.approve(address, amount);
 
     const receipt = await tx.wait();
-    console.log("receipt", receipt);
+    console.log("approve receipt", receipt);
+  }
 
-    console.log('onSubmit', signer)
+  const onSubmit = useCallback(async (data) => {
+    try {
+      await sdk.connect()
+      const provider = new ethers.BrowserProvider(metamaskProvider)
+      const signer = await provider.getSigner()
+
+      const address = "0xffdab174499b6515624f1043205cf21879f170a5";
+      await approve(address, '1000000', signer)
+
+      const abi = [
+        "function create_red_packet(uint256 _number, bool _ifrandom, uint256 _duration, bytes32 _seed, string _message, string _name, uint256 _token_type, address _token_addr, uint256 _total_tokens, string _chat_id) payable"
+      ];
+      const contract = new ethers.Contract(address, abi, signer);
+      console.log('contract', contract.create_red_packet)
+      const tx = await contract.create_red_packet(
+        1,
+        1,
+        60 * 60 * 24,
+        '0xb4ea3b98caa0037b5a71b6a10179f2be9f9f3c3e1ce6e2ab635c1e07169cbd49',
+        'hello',
+        'red packet',
+        1,
+        '0xC666283f0A53C46141f509ed9241129622013d95',
+        '1000000',
+        '-4050289260'
+      )
+
+      const receipt = await tx.wait();
+      console.log("receipt", receipt);
+    } catch (error) {
+      console.log('error', error.message)
+    }
   }, [networkInfo, tokenInfo, metamaskProvider])
 
   useEffect(() => {
 
   }, [])
-
-  if (isSentSuccess) {
-    return (
-      <Box>
-
-      </Box>
-    )
-  }
-
+  /*
+   *   if (isSentSuccess) {
+   *     return (
+   *       <Box>
+   *
+   *       </Box>
+   *     )
+   *   }
+   *  */
   return (
     <Box
       width="100%"
