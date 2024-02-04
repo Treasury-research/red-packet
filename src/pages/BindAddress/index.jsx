@@ -36,16 +36,16 @@ export default function Home() {
         requireAuth: true,
         tokenFetcher: () => token
       })
-
-      const res3 = await api.getUserInfo({}, {
-        requireAuth: true,
-        tokenFetcher: () => accessToken
-      })
-
-      updateUserInfo({
-        ...res3,
-      })
-
+      /*
+       *       const res3 = await api.getUserInfo({}, {
+       *         requireAuth: true,
+       *         tokenFetcher: () => accessToken
+       *       })
+       *
+       *       updateUserInfo({
+       *         ...res3,
+       *       })
+       *  */
       alert(JSON.stringify(res2))
     } catch (error) {
       alert(error.message)
