@@ -14,29 +14,32 @@ export default function Home() {
   const [isBind, setIsBind] = useState(false)
 
   const bindAddress = useCallback(async () => {
-    const accounts = await sdk.connect()
-    const address = accounts[0]
+    try {
+      const accounts = await sdk.connect()
+      const address = accounts[0]
 
-    const { token } = userInfo
-    const message = await api.challenge({ address }, {
-      requireAuth: true,
-      tokenFetcher: () => token
-    })
+      const { token } = userInfo
+      const message = await api.challenge({ address }, {
+        requireAuth: true,
+        tokenFetcher: () => token
+      })
 
 
-    const signature = await sdk.connectAndSign({
-      msg: message,
-    })
-    alert(signature)
+      const signature = await sdk.connectAndSign({
+        msg: message,
+      })
+      alert(signature)
 
-    /* const res2 = await api.bindAddress({
-     *   address,
+      /* const res2 = await api.bindAddress({
+       *   address,
 
-     * }, {
-     *   requireAuth: true,
-     *   tokenFetcher: () => token
-     * }) */
-
+       * }, {
+       *   requireAuth: true,
+       *   tokenFetcher: () => token
+       * }) */
+    } catch (error) {
+      alert(error.message)
+    }
   }, [userInfo])
 
   if (!isBind) {
