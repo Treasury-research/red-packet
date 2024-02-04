@@ -71,7 +71,7 @@ export default function Home() {
     )
   }
 
-  if (userInfo && !userInfo.address) {
+  if (userInfo && !!userInfo.account && !userInfo.address) {
     return (
       <BindAddress />
     )
