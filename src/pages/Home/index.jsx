@@ -132,6 +132,9 @@ export default function Home() {
               </Box>
             </Box>
           </Box>
+          <Box>
+            {JSON.stringify(userInfo)}
+          </Box>
           {!isSignedIn && (
             <Box width="100%" marginBottom="40px" marginTop="auto">
               <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={signIn} loading={isLogingIn} disabled={isLogingIn}>
