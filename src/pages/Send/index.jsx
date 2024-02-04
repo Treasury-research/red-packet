@@ -8,6 +8,8 @@ import GiftImage from "@/assets/images/gift-bg.png"
 import { useForm } from 'react-hook-form'
 import { useUserStore } from '@/store/user'
 import { Popup } from 'react-vant'
+import { ethers, BrowserProvider } from 'ethers'
+import { useSDK } from '@metamask/sdk-react'
 
 export default function Send({ back }) {
   const [tokenInfo, setTokenInfo] = useState()
@@ -16,6 +18,8 @@ export default function Send({ back }) {
   const [showSelectNetwork, setShowSelectNetwork] = useState(false)
   const [showSelectToken, setShowSelectToken] = useState(false)
   const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
+  const [submiting, setSubmiting] = useState(false)
+  const { provider: metamaskProvider, sdk } = useSDK()
   const form = useForm()
   const {
     register,
@@ -34,14 +38,35 @@ export default function Send({ back }) {
     setShowSelectToken(false)
   }, [])
 
-  const onSubmit = useCallback((data) => {
-    console.log('onSubmit', data)
-  }, [networkInfo, tokenInfo])
+  const onSubmit = useCallback(async (data) => {
+    const provider = new ethers.BrowserProvider(metamaskProvider)
+    const signer = await provider.getSigner()
+    const address = "0xffdab174499b6515624f1043205cf21879f170a5";
+    const abi = [
+      "function create_red_packet(uint256 _number, bool _ifrandom, uint256 _duration, bytes32 _seed, string _message, string _name, uint256 _token_type, address _token_addr, uint256 _total_tokens, string _chat_id) payable"
+    ];
+    const contract = new ethers.Contract(address, abi, signer);
+    const tx = await contract.functions.create_red_packet(
+      1,
+      1,
+      300,
+      '0xb4ea3b98caa0037b5a71b6a10179f2be9f9f3c3e1ce6e2ab635c1e07169cbd49',
+      11,
+      22,
+      1,
+      '0xD93658903F051092fC065415e721DF6f57fBe9Bb',
+      '1000000',
+      '-4050289260'
+    )
+
+    const receipt = await tx.wait();
+    console.log("receipt", receipt);
+
+    console.log('onSubmit', signer)
+  }, [networkInfo, tokenInfo, metamaskProvider])
 
   useEffect(() => {
-    form.watch('amount', () => {
 
-    })
   }, [])
 
   if (isSentSuccess) {
