@@ -15,19 +15,21 @@ export default function Home() {
 
   const bindAddress = useCallback(async () => {
     try {
-      const accounts = await sdk.connect()
-      const address = accounts[0]
-
-      const { token } = userInfo
-      const message = await api.challenge({ address }, {
+      const { account, token } = userInfo
+      const message = await api.challenge({ address: account }, {
         requireAuth: true,
         tokenFetcher: () => token
       })
 
-
       const signature = await sdk.connectAndSign({
         msg: message,
       })
+
+      const sign = await ethereum.request({
+        method: 'personal_sign',
+        params: [msg, from],
+      })
+
       alert(signature)
 
       /* const res2 = await api.bindAddress({

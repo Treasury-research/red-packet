@@ -27,7 +27,7 @@ export default function Home() {
       const accounts = await sdk.connect()
 
       updateUserInfo({
-        address: accounts[0]
+        account: accounts[0]
       })
     } catch(err) {
       console.warn(`failed to connect..`, err)
