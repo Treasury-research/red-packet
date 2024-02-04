@@ -7,10 +7,11 @@ import GiftImage from "@/assets/images/gift.png"
 import { useSDK } from '@metamask/sdk-react'
 import * as api from '@/api'
 import { useUserStore } from '@/store/user'
+import { ethers, BrowserProvider } from 'ethers'
 
 export default function Home() {
   const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
-  const { sdk } = useSDK()
+  const { provider: metamaskProvider, sdk } = useSDK()
   const [isBind, setIsBind] = useState(false)
 
   const bindAddress = useCallback(async () => {
@@ -21,15 +22,13 @@ export default function Home() {
         tokenFetcher: () => token
       })
 
-      const signature = await sdk.connectAndSign({
-        msg: message,
-      })
-
+      const provider = new ethers.BrowserProvider(metamaskProvider)
+      const signer = await provider.getSigner()
+      const signature = await signer.signMessage(message)
       alert(signature)
 
       /* const res2 = await api.bindAddress({
        *   address,
-
        * }, {
        *   requireAuth: true,
        *   tokenFetcher: () => token
@@ -37,7 +36,7 @@ export default function Home() {
     } catch (error) {
       alert(error.message)
     }
-  }, [userInfo])
+  }, [userInfo, metamaskProvider])
 
   if (!isBind) {
     return (
