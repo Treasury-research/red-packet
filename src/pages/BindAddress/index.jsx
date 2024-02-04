@@ -28,14 +28,16 @@ export default function Home() {
       const provider = new ethers.BrowserProvider(metamaskProvider)
       const signer = await provider.getSigner()
       const signature = await signer.signMessage(message)
-      alert(signature)
 
-      /* const res2 = await api.bindAddress({
-       *   address,
-       * }, {
-       *   requireAuth: true,
-       *   tokenFetcher: () => token
-       * }) */
+      const res2 = await api.bindAddress({
+        address,
+        signature
+      }, {
+        requireAuth: true,
+        tokenFetcher: () => token
+      })
+
+      alert(JSON.stringify(res2))
     } catch (error) {
       alert(error.message)
     }
