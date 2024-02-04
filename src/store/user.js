@@ -17,11 +17,10 @@ const createUserSlice = immer((set, get) => ({
   getUserInfo: () => get().userInfo,
 }));
 
-export const createUserStore = (initProps) =>
-  create()((...a) => ({ ...createUserSlice(...a), ...initProps }));
+export const createUserStore = (initProps) => create()((...a) => ({ ...createUserSlice(...a), ...initProps }));
 
 export const useUserStore = create()(
-  persist((...set) => ({ ...createUserSlice(...set) }), {
+  (...set) => ({ ...createUserSlice(...set) }), {
     name: 'user-storage',
-  }),
+  },
 );
