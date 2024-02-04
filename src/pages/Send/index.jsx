@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Box, Image, Button, Input } from '@chakra-ui/react'
 import LogoIcon from "@/components/Icons/Logo"
 import SignInIcon from "@/components/Icons/SignIn"
@@ -10,6 +10,8 @@ import { useUserStore } from '@/store/user'
 import { Popup } from 'react-vant'
 
 export default function Send({ back }) {
+  const [tokenInfo, setTokenInfo] = useState()
+  const [networkInfo, setNetworkInfo] = useState()
   const [isSentSuccess, setIsSentSuccess] = useState(false)
   const [showSelectNetwork, setShowSelectNetwork] = useState(false)
   const [showSelectToken, setShowSelectToken] = useState(false)
@@ -19,6 +21,16 @@ export default function Send({ back }) {
     handleSubmit,
     formState: { errors }
   } = useForm()
+
+  const selectNetwork = useCallback((info) => {
+    setNetworkInfo(info)
+    setShowSelectNetwork(false)
+  }, [])
+
+  const selectToken = useCallback((info) => {
+    setTokenInfo(info)
+    setShowSelectToken(false)
+  }, [])
 
   if (isSentSuccess) {
     return (
@@ -118,14 +130,18 @@ export default function Send({ back }) {
               padding="0 20px"
               marginBottom="20px"
               cursor="pointer"
-              onClick={() => setShowSelectNetwork(!showSelectNetwork)}
+              onClick={() => setShowSelectNetwork(true)}
             >
               <Box>
                 选择网络
               </Box>
               <Box>
                 <Box position="relative" paddingRight="20px">
-                  Ethereum Mainnet
+                  {(networkInfo && networkInfo.name) ? (
+                    <Box>{networkInfo.name}</Box>
+                  ) : (
+                    <Box color="#A7A7A9">请选择</Box>
+                  )}
                   <Box
                     position="absolute"
                     top="0"
@@ -150,7 +166,7 @@ export default function Send({ back }) {
               padding="0 20px"
               marginBottom="8px"
             >
-              <Box width="calc(100% - 50px)" display="flex" alignItems="center">
+              <Box width="calc(100% - 80px)" display="flex" alignItems="center">
                 <Box
                   marginRight="auto"
                   height="100%"
@@ -170,8 +186,17 @@ export default function Send({ back }) {
                 </Box>
               </Box>
               <Box>
-                <Box position="relative" paddingRight="20px">
-                  BTC
+                <Box
+                  position="relative"
+                  paddingRight="20px"
+                  onClick={() => setShowSelectToken(true)}
+                  cursor="pointer"
+                >
+                  {(tokenInfo && tokenInfo.name) ? (
+                    <Box>{tokenInfo.name}</Box>
+                  ) : (
+                    <Box color="#A7A7A9">请选择</Box>
+                  )}
                   <Box
                     position="absolute"
                     top="0"
@@ -186,7 +211,7 @@ export default function Send({ back }) {
                 </Box>
               </Box>
             </Box>
-            <Box color="#A7A7A9" fontSize="14px" padding="0 20px" marginBottom="14px">可用余额: 8,750.0000000 BTC</Box>
+            <Box color="#A7A7A9" fontSize="14px" padding="0 20px" marginBottom="14px">可用余额: 0.0000000 {tokenInfo && tokenInfo.symbol}</Box>
             <Box
               background="white"
               borderRadius="40px"
@@ -242,7 +267,7 @@ export default function Send({ back }) {
             </Box>
           </Box>
           <Box width="100%" marginBottom="40px" marginTop="auto" display="flex" flexDirection="column" alignItems="center">
-            <Box fontSize="30px" fontWeight="bold" color="white" marginBottom="10px">1.00 BTC</Box>
+            <Box fontSize="30px" fontWeight="bold" color="white" marginBottom="10px">1.00 {tokenInfo && tokenInfo.symbol}</Box>
             <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold">
               发礼品
             </Button>
@@ -255,7 +280,6 @@ export default function Send({ back }) {
         style={{
           borderTopLeftRadius: '10px',
           borderTopRightRadius: '10px',
-          //minHeight: '80px'
         }}
         onClose={() => setShowSelectNetwork(false)}
       >
@@ -267,12 +291,101 @@ export default function Send({ back }) {
             width="100%"
             height="20px"
             padding="0"
-          />
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Box
+              width="40px"
+              height="4px"
+              borderRadius="4px"
+              background="#ccc"
+            />
+          </Box>
+          <Box>
+            <Box
+              onClick={() => selectNetwork({ name: 'Mumbai' })}
+              width="100%"
+              height="44px"
+              borderTop="1px solid #D8D8D8"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              fontWeight="500"
+              fontSize="16px"
+              cursor="pointer"
+              padding="0"
+            >
+              Mumbai
+            </Box>
+          </Box>
           <Box
             onClick={() => setShowSelectNetwork(false)}
             width="100%"
             height="44px"
-            borderTop="1px solid #D8D8D8"
+            borderTop="2px solid #D8D8D8"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            fontWeight="500"
+            fontSize="16px"
+            cursor="pointer"
+            padding="0"
+          >
+            Cancel
+          </Box>
+        </Box>
+      </Popup>
+      <Popup
+        visible={showSelectToken}
+        position="bottom"
+        style={{
+          borderTopLeftRadius: '10px',
+          borderTopRightRadius: '10px',
+        }}
+        onClose={() => setShowSelectToken(false)}
+      >
+        <Box
+          borderRadius="10px"
+          overflow="hidden"
+        >
+          <Box
+            width="100%"
+            height="20px"
+            padding="0"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Box
+              width="40px"
+              height="4px"
+              borderRadius="4px"
+              background="#ccc"
+            />
+          </Box>
+          <Box>
+            <Box
+              onClick={() => selectToken({ name: 'Test', symbol: 'Test' })}
+              width="100%"
+              height="44px"
+              borderTop="1px solid #D8D8D8"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              fontWeight="500"
+              fontSize="16px"
+              cursor="pointer"
+              padding="0"
+            >
+              Test
+            </Box>
+          </Box>
+          <Box
+            onClick={() => setShowSelectToken(false)}
+            width="100%"
+            height="44px"
+            borderTop="2px solid #D8D8D8"
             display="flex"
             alignItems="center"
             justifyContent="center"
