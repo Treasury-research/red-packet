@@ -116,6 +116,7 @@ export default function Send({ back }) {
               justifyContent="space-between"
               padding="0 20px"
               marginBottom="20px"
+              cursor="pointer"
             >
               <Box>
                 选择网络
@@ -147,7 +148,7 @@ export default function Send({ back }) {
               padding="0 20px"
               marginBottom="8px"
             >
-              <Box width="calc(100% - 80px)" display="flex" alignItems="center">
+              <Box width="calc(100% - 50px)" display="flex" alignItems="center">
                 <Box
                   marginRight="auto"
                   height="100%"
@@ -161,6 +162,7 @@ export default function Send({ back }) {
                     borderWidth="0"
                     boxShadow="none !important"
                     border="none"
+                    placeholder="发多少"
                     {...register('amount')}
                   />
                 </Box>
@@ -207,6 +209,7 @@ export default function Send({ back }) {
                     borderWidth="0"
                     boxShadow="none !important"
                     value="20"
+                    placeholder="礼品发给几个人"
                     {...register('count')}
                   />
                 </Box>
