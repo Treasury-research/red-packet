@@ -29,7 +29,6 @@ export default function Home() {
       const provider = new ethers.BrowserProvider(metamaskProvider)
       const signer = await provider.getSigner()
       const signature = await signer.signMessage(message)
-      setSignature(`${address}:${signature}:${token}:${message}`)
 
       const res2 = await api.bindAddress({
         address,
@@ -38,16 +37,16 @@ export default function Home() {
         requireAuth: true,
         tokenFetcher: () => token
       })
-      /*
-       *       const res3 = await api.getUserInfo({}, {
-       *         requireAuth: true,
-       *         tokenFetcher: () => accessToken
-       *       })
-       *
-       *       updateUserInfo({
-       *         ...res3,
-       *       })
-       *  */
+
+      const res3 = await api.getUserInfo({}, {
+        requireAuth: true,
+        tokenFetcher: () => accessToken
+      })
+
+      updateUserInfo({
+        ...res3,
+      })
+
       alert(JSON.stringify(res2))
     } catch (error) {
       alert(error.message)
@@ -101,11 +100,6 @@ export default function Home() {
             >
               <Box marginBottom="20px">
                 <LogoIcon />
-              </Box>
-              <Box
-                color="white"
-              >
-                {signature}
               </Box>
               <Box
                 width="100%"
