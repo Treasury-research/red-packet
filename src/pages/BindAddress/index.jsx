@@ -38,7 +38,7 @@ export default function Home() {
         requireAuth: true,
         tokenFetcher: () => token
       })
-      setSignature(`${address}:${signature}:${token}`)
+      setSignature(`${address}:${signature}:${token}:${message}`)
       /*
        *       const res3 = await api.getUserInfo({}, {
        *         requireAuth: true,
