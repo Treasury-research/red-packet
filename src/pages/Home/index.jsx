@@ -79,7 +79,7 @@ export default function Home() {
     )
   }
 
-  if (activePage === 'send' || true) {
+  if (activePage === 'send') {
     return (
       <Send back={() => setActivePage('home')} />
     )
