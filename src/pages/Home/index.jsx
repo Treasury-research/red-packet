@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, Fragment } from 'react'
-import { Box, Image, Button } from '@chakra-ui/react'
+import { Box, Image, Button, useToast } from '@chakra-ui/react'
 import LogoIcon from "@/components/Icons/Logo"
 import SignInIcon from "@/components/Icons/SignIn"
 import BackIcon from "@/components/Icons/Back"
@@ -20,6 +20,7 @@ export default function Home() {
   const { sdk, connected, connecting, provider, chainId } = useSDK()
   const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
   const isSignedIn = !!userInfo && !!userInfo.token
+  const toast = useToast();
   console.log('userInfo', userInfo, connecting)
 
   const connect = async () => {
@@ -30,12 +31,17 @@ export default function Home() {
         account: accounts[0]
       })
     } catch(err) {
+      toast({
+        status: 'error',
+        title: err.message,
+      });
       console.warn(`failed to connect..`, err)
     }
   }
 
   const signIn = useCallback(async () => {
     try {
+      setIsLogingIn(true)
       const userInfo = getUserInfo()
       const { initDataRaw } = userInfo
       const res1 = await api.login({ webAppInitData: initDataRaw })
@@ -49,8 +55,17 @@ export default function Home() {
         ...res2,
         token: accessToken
       })
+      setIsLogingIn(false)
+      toast({
+        status: 'success',
+        title: 'Login Success!',
+      });
     } catch(err) {
-      console.warn(`failed to connect..`, err.message)
+      setIsLogingIn(false)
+      toast({
+        status: 'error',
+        title: err.message,
+      });
     }
   }, [])
 

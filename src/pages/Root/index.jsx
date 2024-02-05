@@ -114,9 +114,12 @@ function SDKInitialState() {
 export default function Root() {
   /* return (
    *   <Box
-   *     width="100vw"
-   *     height="100vh"
    *     background="black"
+   *     position="fixed"
+   *     width="100%"
+   *     height="100%"
+   *     top="0"
+   *     left="0"
    *   >
    *     <Box
    *       position="fixed"
@@ -157,9 +160,12 @@ export default function Root() {
         initial={SDKInitialState}
       >
         <Box
-          width="100vw"
-          height="100vh"
           background="black"
+          position="fixed"
+          width="100%"
+          height="100%"
+          top="0"
+          left="0"
         >
           <Box
             position="fixed"
