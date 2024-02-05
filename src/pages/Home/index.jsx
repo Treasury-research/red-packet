@@ -79,7 +79,7 @@ export default function Home() {
     )
   }
 
-  if (activePage === 'send') {
+  if (activePage === 'send' || true) {
     return (
       <Send back={() => setActivePage('home')} />
     )
@@ -90,6 +90,9 @@ export default function Home() {
       <BindAddress back={() => setActivePage('home')} />
     )
   }
+
+  const disabled = isLogingIn
+  const loading = isLogingIn
 
   return (
     <Box
@@ -155,7 +158,18 @@ export default function Home() {
           </Box>
           {!isSignedIn && (
             <Box width="100%" marginBottom="40px" marginTop="auto">
-              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={signIn} loading={isLogingIn} disabled={isLogingIn}>
+              <Button
+                width="100%"
+                borderRadius="50px"
+                height="50px"
+                fontSize="16px"
+                fontWeight="bold"
+                opacity={(disabled || loading) ? '0.5' : '1'}
+                cursor={(disabled || loading) ? 'disabled' : 'default'}
+                onClick={signIn}
+                loading={loading}
+                disabled={disabled}
+              >
                 <Box marginRight="8px"><SignInIcon /></Box>
                 Sign in
               </Button>

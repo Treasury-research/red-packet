@@ -32,6 +32,14 @@ export default function Send({ back }) {
     clearUserStore()
   }, [])
 
+  const addNetwork = useCallback(() => {
+
+  }, [])
+
+  const switchNetwork = useCallback(() => {
+
+  }, [])
+
   const selectNetwork = useCallback((info) => {
     setNetworkInfo(info)
     setShowSelectNetwork(false)
@@ -228,7 +236,7 @@ export default function Send({ back }) {
                 padding="0 20px"
                 marginBottom="8px"
               >
-                <Box width="calc(100% - 80px)" display="flex" alignItems="center">
+                <Box width="calc(100% - 60px)" display="flex" alignItems="center">
                   <Box
                     marginRight="auto"
                     height="100%"
@@ -247,10 +255,9 @@ export default function Send({ back }) {
                     />
                   </Box>
                 </Box>
-                <Box>
+                <Box width="70px">
                   <Box
                     position="relative"
-                    paddingRight="20px"
                     onClick={() => setShowSelectToken(true)}
                     cursor="pointer"
                   >
@@ -273,7 +280,14 @@ export default function Send({ back }) {
                   </Box>
                 </Box>
               </Box>
-              <Box color="#A7A7A9" fontSize="14px" padding="0 20px" marginBottom="14px">可用余额: 0.0000000 {tokenInfo && tokenInfo.symbol}</Box>
+              <Box
+                color="#A7A7A9"
+                fontSize="14px"
+                padding="0 20px"
+                marginBottom="14px"
+              >
+                可用余额: 0.0000000 {tokenInfo && tokenInfo.symbol}
+              </Box>
               <Box
                 background="white"
                 borderRadius="40px"
@@ -298,6 +312,7 @@ export default function Send({ back }) {
                       borderWidth="0"
                       boxShadow="none !important"
                       placeholder="礼品发给几个人"
+                      paddingRight="20px"
                       {...register('count')}
                     />
                   </Box>
@@ -321,6 +336,7 @@ export default function Send({ back }) {
                     border="0"
                     padding="0"
                     boxShadow="none !important"
+                    placeholder="备注"
                     {...register('memo')}
                   />
                 </Box>
