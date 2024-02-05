@@ -68,31 +68,33 @@ export default function Send({ back }) {
     }
   }, [metamaskProvider])
 
-  const selectNetwork = useCallback((info) => {
-    setNetworkInfo(info)
-    setShowSelectNetwork(false)
-  }, [])
-
-  const selectToken = useCallback((info) => {
-    setTokenInfo(info)
+  const switchToken = useCallback(() => {
+    const tokenInfo = {
+      contractAddress: '0xC666283f0A53C46141f509ed9241129622013d95',
+      decimal: 6,
+      symbol: 'TEST',
+      name: 'Test'
+    }
+    setTokenInfo(tokenInfo)
     setShowSelectToken(false)
   }, [])
 
-  async function approve(address, amount, signer) {
-    const contractAddress = "0xC666283f0A53C46141f509ed9241129622013d95";
+  const approve = useCallback(async (address, amount, signer) => {
+    const contractAddress = tokenInfo.contractAddress
     const abi = [
-      "function approve(address _spender, uint256 _value) returns (bool)"
-    ];
-
-    const contract = new ethers.Contract(contractAddress, abi, signer);
-    const tx = await contract.approve(address, amount);
-
-    const receipt = await tx.wait();
-    console.log("approve receipt", receipt);
-  }
+      `function approve(address _spender, uint256 _value) returns (bool)`
+    ]
+    const contract = new ethers.Contract(contractAddress, abi, signer)
+    const tx = await contract.approve(address, amount)
+    const receipt = await tx.wait()
+    console.log("approve receipt", receipt)
+  }, [tokenInfo])
 
   const onSubmit = useCallback(async (data) => {
     try {
+      const { amount, count, memo } = data
+      const amountInDecimal = String(Number(amount) * Math.pow(10, tokenInfo.decimal))
+
       await sdk.connect()
       const provider = new ethers.BrowserProvider(metamaskProvider)
       const signer = await provider.getSigner()
@@ -110,11 +112,11 @@ export default function Send({ back }) {
         1,
         60 * 60 * 24,
         '0xb4ea3b98caa0037b5a71b6a10179f2be9f9f3c3e1ce6e2ab635c1e07169cbd49',
-        'hello',
+        memo,
         'red packet',
         1,
-        '0xC666283f0A53C46141f509ed9241129622013d95',
-        '1000000',
+        tokenInfo.contractAddress,
+        amountInDecimal,
         '-4050289260'
       )
 
@@ -470,7 +472,7 @@ export default function Send({ back }) {
           </Box>
           <Box>
             <Box
-              onClick={() => selectToken({ name: 'Test', symbol: 'Test' })}
+              onClick={switchToken}
               width="100%"
               height="44px"
               borderTop="1px solid #D8D8D8"
