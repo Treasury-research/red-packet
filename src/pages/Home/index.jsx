@@ -55,6 +55,8 @@ export default function Home() {
         ...res2,
         token: accessToken
       })
+
+      await sdk.connect()
       setIsLogingIn(false)
       toast({
         status: 'success',
