@@ -300,12 +300,12 @@ export default function Send({ back }) {
               >
                 <Box width="calc(100%)" display="flex" alignItems="center">
                   <Box
-                    marginRight="auto"
                     height="100%"
+                    width="80px"
                   >
                     领取人数
                   </Box>
-                  <Box width="50%">
+                  <Box width="calc(100% - 80px)">
                     <Input
                       textAlign="right"
                       outline="none"
