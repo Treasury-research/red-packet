@@ -166,6 +166,7 @@ export default function Root() {
           height="100%"
           top="0"
           left="0"
+          overflowY="scroll"
         >
           <Box
             position="fixed"
@@ -192,7 +193,7 @@ export default function Root() {
               <MoreIcon />
             </Box>
           </Box>
-          <Box paddingTop="44px" height="100%">
+          <Box paddingTop="44px" height="100%" overflowY="scroll">
             <Outlet />
           </Box>
         </Box>
