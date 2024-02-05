@@ -32,13 +32,41 @@ export default function Send({ back }) {
     clearUserStore()
   }, [])
 
-  const addNetwork = useCallback(() => {
+  const switchNetwork = useCallback(async () => {
+    // 'Mumbai'
+    setShowSelectNetwork(false)
+    const ethereum = metamaskProvider
+    const networkInfo = {
+      chainId: '0x13881',
+      chainName: 'Mumbai',
+      rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
+      currencySymbol: 'MATIC'
+    }
 
-  }, [])
+    try {
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x13881' }],
+      })
 
-  const switchNetwork = useCallback(() => {
+      setNetworkInfo(networkInfo)
+    } catch (switchError) {
+      // This error code indicates that the chain has not been added to MetaMask.
+      if (switchError.code === 4902) {
+        try {
+          await ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [networkInfo],
+          })
 
-  }, [])
+          setNetworkInfo(networkInfo)
+        } catch (addError) {
+          // handle "add" error
+        }
+      }
+      // handle other "switch" errors
+    }
+  }, [metamaskProvider])
 
   const selectNetwork = useCallback((info) => {
     setNetworkInfo(info)
@@ -207,8 +235,8 @@ export default function Send({ back }) {
                 </Box>
                 <Box>
                   <Box position="relative" paddingRight="20px">
-                    {(networkInfo && networkInfo.name) ? (
-                      <Box>{networkInfo.name}</Box>
+                    {(networkInfo && networkInfo.chainName) ? (
+                      <Box>{networkInfo.chainName}</Box>
                     ) : (
                       <Box color="#A7A7A9">请选择</Box>
                     )}
@@ -380,7 +408,7 @@ export default function Send({ back }) {
           </Box>
           <Box>
             <Box
-              onClick={() => selectNetwork({ name: 'Mumbai' })}
+              onClick={switchNetwork}
               width="100%"
               height="44px"
               borderTop="1px solid #D8D8D8"
