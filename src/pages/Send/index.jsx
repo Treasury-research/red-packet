@@ -312,7 +312,6 @@ export default function Send({ back }) {
                       borderWidth="0"
                       boxShadow="none !important"
                       placeholder="礼品发给几个人"
-                      paddingRight="20px"
                       {...register('count')}
                     />
                   </Box>
