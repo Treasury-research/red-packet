@@ -11,10 +11,11 @@ import { Popup } from 'react-vant'
 import { ethers, BrowserProvider } from 'ethers'
 import { useSDK } from '@metamask/sdk-react'
 import * as api from '@/api'
+import { networkList } from '@/config'
 
 export default function Send({ back }) {
-  const [tokenInfo, setTokenInfo] = useState()
   const [networkInfo, setNetworkInfo] = useState()
+  const [tokenInfo, setTokenInfo] = useState()
   const [isSentSuccess, setIsSentSuccess] = useState(false)
   const [showSelectNetwork, setShowSelectNetwork] = useState(false)
   const [showSelectToken, setShowSelectToken] = useState(false)
@@ -33,26 +34,26 @@ export default function Send({ back }) {
     // clearUserStore()
   }, [])
 
-  const switchNetwork = useCallback(async () => {
-    // 'Mumbai'
+  const switchNetwork = useCallback(async (networkInfo) => {
+    const {
+      chainId,
+      chainName,
+      rpcUrls,
+      currencySymbol,
+      currencyDecimal
+    } = networkInfo
+
     setShowSelectNetwork(false)
     const ethereum = metamaskProvider
-    const networkInfo = {
-      chainId: '0x13881',
-      chainName: 'Mumbai',
-      rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
-      currencySymbol: 'MATIC'
-    }
 
     try {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x13881' }],
+        params: [{ chainId }],
       })
 
       setNetworkInfo(networkInfo)
     } catch (switchError) {
-      // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {
         try {
           await ethereum.request({
@@ -62,20 +63,13 @@ export default function Send({ back }) {
 
           setNetworkInfo(networkInfo)
         } catch (addError) {
-          // handle "add" error
+
         }
       }
-      // handle other "switch" errors
     }
   }, [metamaskProvider])
 
-  const switchToken = useCallback(() => {
-    const tokenInfo = {
-      contractAddress: '0xC666283f0A53C46141f509ed9241129622013d95',
-      decimal: 6,
-      symbol: 'TEST',
-      name: 'Test'
-    }
+  const switchToken = useCallback((tokenInfo) => {
     setTokenInfo(tokenInfo)
     setShowSelectToken(false)
   }, [])
@@ -406,7 +400,7 @@ export default function Send({ back }) {
                 padding="0 20px"
                 marginBottom="14px"
               >
-                可用余额: 0.0000000 {tokenInfo && tokenInfo.symbol}
+                可用余额: 0 {tokenInfo && tokenInfo.symbol}
               </Box>
               <Box
                 background="white"
@@ -462,7 +456,7 @@ export default function Send({ back }) {
               </Box>
             </Box>
             <Box width="100%" marginBottom="40px" marginTop="auto" display="flex" flexDirection="column" alignItems="center">
-              <Box fontSize="30px" fontWeight="bold" color="white" marginBottom="10px">{getValues('amount') || '0.0000'} {tokenInfo && tokenInfo.symbol}</Box>
+              <Box fontSize="30px" fontWeight="bold" color="white" marginBottom="10px">{getValues('amount') || '0'} {tokenInfo && tokenInfo.symbol}</Box>
               <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" type="submit" marginBottom="20px">
                 发礼品
               </Button>
@@ -501,28 +495,30 @@ export default function Send({ back }) {
               background="#ccc"
             />
           </Box>
-          <Box>
-            <Box
-              onClick={switchNetwork}
-              width="100%"
-              height="44px"
-              borderTop="1px solid #D8D8D8"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              fontWeight="500"
-              fontSize="16px"
-              cursor="pointer"
-              padding="0"
-            >
-              Mumbai
+          {networkList.map((network) =>
+            <Box>
+              <Box
+                key={network.chainId}
+                onClick={() => switchNetwork(network)}
+                width="100%"
+                height="44px"
+                borderBottom="1px solid #D8D8D8"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                fontWeight="500"
+                fontSize="16px"
+                cursor="pointer"
+                padding="0"
+              >
+                {network.chainName}
+              </Box>
             </Box>
-          </Box>
+          )}
           <Box
             onClick={() => setShowSelectNetwork(false)}
             width="100%"
             height="44px"
-            borderTop="2px solid #D8D8D8"
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -563,28 +559,30 @@ export default function Send({ back }) {
               background="#ccc"
             />
           </Box>
-          <Box>
-            <Box
-              onClick={switchToken}
-              width="100%"
-              height="44px"
-              borderTop="1px solid #D8D8D8"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              fontWeight="500"
-              fontSize="16px"
-              cursor="pointer"
-              padding="0"
-            >
-              Test
+          {networkInfo && networkInfo.tokenList.map((token) =>
+            <Box>
+              <Box
+                key={token.contractAddress}
+                onClick={() => switchToken(token)}
+                width="100%"
+                height="44px"
+                borderBottom="1px solid #D8D8D8"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                fontWeight="500"
+                fontSize="16px"
+                cursor="pointer"
+                padding="0"
+              >
+                {token.name}
+              </Box>
             </Box>
-          </Box>
+          )}
           <Box
             onClick={() => setShowSelectToken(false)}
             width="100%"
             height="44px"
-            borderTop="2px solid #D8D8D8"
             display="flex"
             alignItems="center"
             justifyContent="center"
