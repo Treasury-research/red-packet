@@ -59,6 +59,10 @@ export default function Send({ back }) {
     return () => subscription.unsubscribe()
   }, [watch])
 
+  useEffect(() => {
+    await sdk.connect()
+  }, [])
+
   const switchNetwork = useCallback(async (networkInfo) => {
     const {
       chainId,
@@ -69,7 +73,7 @@ export default function Send({ back }) {
     } = networkInfo
 
     setShowSelectNetwork(false)
-    await sdk.connect()
+    // await sdk.connect()
     const ethereum = window.ethereum
 
     try {
@@ -137,7 +141,7 @@ export default function Send({ back }) {
 
     try {
       setIsSending(true)
-      await sdk.connect()
+      // await sdk.connect()
 
       if (!tokenInfo.isNative) {
         const { amount, count, memo } = data
@@ -288,6 +292,7 @@ export default function Send({ back }) {
         width="100%"
         height="100%"
         paddingTop="44px"
+        overflowY="scroll"
       >
         <Box
           width="100%"
