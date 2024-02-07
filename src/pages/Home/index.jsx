@@ -13,6 +13,7 @@ import BindAddress from '@/pages/BindAddress'
 import * as api from '@/api'
 
 export default function Home() {
+  const [intent, setIntent] = useState('send')
   const [activePage, setActivePage] = useState('home')
   const [isShowRules, setIsShowRules] = useState(false)
   const [isLogingIn, setIsLogingIn] = useState(false)
@@ -39,13 +40,33 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    const startParam = userInfo
+
+    if (startParam && startParam.split('_')) {
+      const params = startParam.split('_')
+
+      if (params[0]) {
+        setIntent('send')
+        updateUserInfo({
+          chatId: params[0]
+        })
+      } else if (params[1]) {
+        setIntent('claim')
+        updateUserInfo({
+          redPacketId: params[1]
+        })
+      }
+    }
+  }, [])
+
   const signIn = useCallback(async () => {
     try {
       setIsLogingIn(true)
       const userInfo = getUserInfo()
       const { initDataRaw } = userInfo
       // user=%7B%22id%22%3A1960649593%2C%22first_name%22%3A%22T%22%2C%22last_name%22%3A%22T%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-8465888862239987465&chat_type=group&start_param=test&auth_date=1706944227&hash=5828659d81ad70d033f72569dbdbe98ef0fdf3a84b2003400c28cd0d244f39a5
-      const res1 = await api.login({ webAppInitData: `user=%7B%22id%22%3A1960649593%2C%22first_name%22%3A%22T%22%2C%22last_name%22%3A%22T%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-8465888862239987465&chat_type=group&start_param=test&auth_date=1706944227&hash=5828659d81ad70d033f72569dbdbe98ef0fdf3a84b2003400c28cd0d244f39a5` })
+      const res1 = await api.login({ webAppInitData: initDataRaw })
       const { accessToken } = res1
       const res2 = await api.getUserInfo({}, {
         requireAuth: true,
@@ -82,15 +103,15 @@ export default function Home() {
     )
   }
 
-  if (activePage === 'send') {
-    return (
-      <Send back={() => setActivePage('home')} />
-    )
-  }
-
   if (userInfo && userInfo.token && !userInfo.address) {
     return (
       <BindAddress back={() => setActivePage('home')} />
+    )
+  }
+
+  if (activePage === 'send') {
+    return (
+      <Send back={() => setActivePage('home')} />
     )
   }
 
@@ -177,7 +198,37 @@ export default function Home() {
               </Button>
             </Box>
           )}
-          {!!isSignedIn && (
+          {!!isSignedIn && (intent === 'claim') && (
+            <Box marginTop="auto">
+              <Box width="100%" marginBottom="40px">
+                <Button
+                  width="100%"
+                  borderRadius="50px"
+                  height="50px"
+                  fontSize="16px"
+                  fontWeight="bold"
+                  onClick={() => {}}
+                >
+                  领取礼品
+                </Button>
+              </Box>
+              <Box width="100%">
+                <Box
+                  width="100%"
+                  height="50px"
+                  fontSize="16px"
+                  fontWeight="bold"
+                  color="white"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  {`历史记录 >`}
+                </Box>
+              </Box>
+            </Box>
+          )}
+          {!!isSignedIn && (intent === 'send') && (
             <Box marginTop="auto">
               <Box width="100%" marginBottom="40px">
                 <Button
