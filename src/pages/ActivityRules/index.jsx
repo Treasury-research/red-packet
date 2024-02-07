@@ -17,12 +17,13 @@ export default function ActivityRules({ back }) {
       position="relative"
     >
       <Box
-        position="absolute"
+        position="fixed"
         top="0"
         left="0"
         color="white"
         width="100%"
         height="44px"
+        zIndex="2"
       >
         <Box
           width="100%"
@@ -41,6 +42,7 @@ export default function ActivityRules({ back }) {
         width="100%"
         height="100%"
         paddingTop="44px"
+        overflowY="scroll"
       >
         <Box
           width="100%"
