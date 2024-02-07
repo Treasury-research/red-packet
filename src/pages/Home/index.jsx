@@ -41,10 +41,10 @@ export default function Home() {
   }
 
   useEffect(() => {
-    const startParam = userInfo
+    const { startParam } = userInfo
 
     if (startParam) {
-      alert(`startParam:${JSON.stringify(startParam)}`)
+      alert(`startParam:startParam`)
       const params = startParam.split('_')
 
       if (params[0]) {
