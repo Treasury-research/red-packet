@@ -43,7 +43,7 @@ export default function Home() {
   useEffect(() => {
     const startParam = userInfo
 
-    if (startParam && startParam.split('_')) {
+    if (startParam) {
       const params = startParam.split('_')
 
       if (params[0]) {
@@ -58,7 +58,7 @@ export default function Home() {
         })
       }
     }
-  }, [])
+  }, [userInfo])
 
   const signIn = useCallback(async () => {
     try {
