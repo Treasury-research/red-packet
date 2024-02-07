@@ -44,7 +44,7 @@ export default function Home() {
     const { startParam } = userInfo
 
     if (startParam) {
-      alert(`startParam:startParam`)
+      alert(`startParam:${startParam}`)
       const params = startParam.split('_')
 
       if (params[0]) {
@@ -59,7 +59,7 @@ export default function Home() {
         })
       }
     }
-  }, [userInfo])
+  }, [userInfo.startParam])
 
   const signIn = useCallback(async () => {
     try {
