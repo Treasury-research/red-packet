@@ -78,11 +78,6 @@ export default function Send({ back }) {
 
     try {
       await ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [networkInfo],
-      })
-
-      await ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId }],
       })
@@ -93,7 +88,12 @@ export default function Send({ back }) {
         try {
           await ethereum.request({
             method: 'wallet_addEthereumChain',
-            params: [networkInfo],
+            params: [{
+              chainId: networkInfo.chainId,
+              chainName: networkInfo.chainName,
+              rpcUrls: networkInfo.rpcUrls,
+              currencySymbol: networkInfo.currencySymbol,
+            }],
           })
 
           setNetworkInfo(networkInfo)
@@ -331,6 +331,7 @@ export default function Send({ back }) {
       <Box
         width="100%"
         height="100%"
+        paddingTop="44px"
       >
         <Box
           width="100%"
