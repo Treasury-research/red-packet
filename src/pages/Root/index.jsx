@@ -122,32 +122,6 @@ export default function Root() {
    *     left="0"
    *     background="linear-gradient(to bottom, #0D1320, #0C1845)"
    *   >
-   *     <Box
-   *       position="fixed"
-   *       top="0"
-   *       left="0"
-   *       height="44px"
-   *       width="100vw"
-   *       background="#212121"
-   *       padding="0 24px"
-   *       display="flex"
-   *       alignItems="center"
-   *       justifyContent="flex-start"
-   *       zIndex="2"
-   *     >
-   *       <Box marginRight="20px" cursor="pointer">
-   *         <CloseIcon />
-   *       </Box>
-   *       <Box
-   *         color="white"
-   *         fontWeight="600"
-   *       >
-   *         typobot
-   *       </Box>
-   *       <Box marginLeft="auto" cursor="pointer">
-   *         <MoreIcon />
-   *       </Box>
-   *     </Box>
    *     <Box paddingTop="44px" height="100%">
    *       <Outlet />
    *     </Box>
@@ -171,31 +145,6 @@ export default function Root() {
           overflowY="scroll"
           background="linear-gradient(to bottom, #0D1320, #0C1845)"
         >
-          <Box
-            position="fixed"
-            top="0"
-            left="0"
-            height="44px"
-            width="100vw"
-            background="#212121"
-            padding="0 24px"
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-start"
-          >
-            <Box marginRight="20px" cursor="pointer">
-              <CloseIcon />
-            </Box>
-            <Box
-              color="white"
-              fontWeight="600"
-            >
-              typobot
-            </Box>
-            <Box marginLeft="auto" cursor="pointer">
-              <MoreIcon />
-            </Box>
-          </Box>
           <Box paddingTop="44px" height="100%" overflowY="scroll">
             <Outlet />
           </Box>
