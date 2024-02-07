@@ -44,6 +44,7 @@ export default function Home() {
     const startParam = userInfo
 
     if (startParam) {
+      alert('startParam', startParam)
       const params = startParam.split('_')
 
       if (params[0]) {
