@@ -44,7 +44,7 @@ export default function Send({ back }) {
     watch,
   } = form
 
-  const disabled = !isValid || isSending
+  const disabled = !isValid || !!isSending
 
   console.log('errors', errors, isValid)
 
@@ -59,11 +59,6 @@ export default function Send({ back }) {
     return () => subscription.unsubscribe()
   }, [watch])
 
-  useEffect(() => {
-    // clearUserStore()
-    // trigger()
-  }, [])
-
   const switchNetwork = useCallback(async (networkInfo) => {
     const {
       chainId,
@@ -73,10 +68,8 @@ export default function Send({ back }) {
       currencyDecimal
     } = networkInfo
 
-    if (!metamaskProvider) await sdk.connect()
-
     setShowSelectNetwork(false)
-    const ethereum = metamaskProvider
+    const ethereum = window.ethereum
 
     try {
       await ethereum.request({
@@ -116,7 +109,7 @@ export default function Send({ back }) {
         });
       }
     }
-  }, [metamaskProvider])
+  }, [])
 
   const switchToken = useCallback((tokenInfo) => {
     setTokenInfo(tokenInfo)
@@ -150,7 +143,7 @@ export default function Send({ back }) {
         const amountInDecimal = ethers.parseUnits(amount, tokenInfo.decimal)
         console.log('amountInDecimal kkk', amountInDecimal)
 
-        const provider = new ethers.BrowserProvider(metamaskProvider)
+        const provider = new ethers.BrowserProvider(window.ethereum)
         const signer = await provider.getSigner()
 
         const address = "0xffdab174499b6515624f1043205cf21879f170a5";
@@ -179,7 +172,7 @@ export default function Send({ back }) {
         const amountInDecimal = ethers.parseEther(amount)
         console.log('amountInDecimal', amountInDecimal)
 
-        const provider = new ethers.BrowserProvider(metamaskProvider)
+        const provider = new ethers.BrowserProvider(window.ethereum)
         const signer = await provider.getSigner()
 
         const address = "0xffdab174499b6515624f1043205cf21879f170a5";
@@ -223,7 +216,7 @@ export default function Send({ back }) {
         title: error.message,
       });
     }
-  }, [networkInfo, tokenInfo, metamaskProvider])
+  }, [networkInfo, tokenInfo])
 
   useEffect(() => {
     const main = async () => {

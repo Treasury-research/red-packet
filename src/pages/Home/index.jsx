@@ -65,7 +65,7 @@ export default function Home() {
   const signIn = useCallback(async () => {
     try {
       setIsLogingIn(true)
-      await sdk.connect()
+      // await sdk.connect()
       const userInfo = getUserInfo()
       const { initDataRaw } = userInfo
       // user=%7B%22id%22%3A1960649593%2C%22first_name%22%3A%22T%22%2C%22last_name%22%3A%22T%22%2C%22language_code%22%3A%22zh-hans%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=-8465888862239987465&chat_type=group&start_param=test&auth_date=1706944227&hash=5828659d81ad70d033f72569dbdbe98ef0fdf3a84b2003400c28cd0d244f39a5
@@ -98,6 +98,7 @@ export default function Home() {
   const claim = useCallback(async (data) => {
     try {
       setIsClaiming(true)
+      await sdk.connect()
       const { amount, count, memo } = data
       const token = userInfo.token
 
@@ -111,7 +112,7 @@ export default function Home() {
       console.log('message', message)
 
       await sdk.connect()
-      const provider = new ethers.BrowserProvider(metamaskProvider)
+      const provider = new ethers.BrowserProvider(window.ethereum)
       const signer = await provider.getSigner()
 
       const address = '0xffdab174499b6515624f1043205cf21879f170a5';
