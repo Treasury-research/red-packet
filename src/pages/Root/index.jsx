@@ -122,7 +122,7 @@ export default function Root() {
    *     left="0"
    *     background="linear-gradient(to bottom, #0D1320, #0C1845)"
    *   >
-   *     <Box paddingTop="44px" height="100%">
+   *     <Box height="100%">
    *       <Outlet />
    *     </Box>
    *   </Box>
@@ -145,7 +145,7 @@ export default function Root() {
           overflowY="scroll"
           background="linear-gradient(to bottom, #0D1320, #0C1845)"
         >
-          <Box paddingTop="44px" height="100%" overflowY="scroll">
+          <Box height="100%" overflowY="scroll">
             <Outlet />
           </Box>
         </Box>

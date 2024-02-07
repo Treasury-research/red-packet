@@ -17,7 +17,7 @@ export default function ActivityRules({ back }) {
       position="relative"
     >
       <Box
-        position="fixed"
+        position="absolute"
         top="0"
         left="0"
         color="white"
@@ -41,7 +41,6 @@ export default function ActivityRules({ back }) {
       <Box
         width="100%"
         height="100%"
-        paddingTop="44px"
       >
         <Box
           width="100%"

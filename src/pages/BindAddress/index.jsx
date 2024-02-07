@@ -162,7 +162,6 @@ export default function BindAddress({ back }) {
       <Box
         width="100%"
         height="100%"
-        paddingTop="44px"
       >
         <Box
           width="100%"
