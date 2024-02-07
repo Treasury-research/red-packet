@@ -136,7 +136,6 @@ export default function Root() {
         initial={SDKInitialState}
       >
         <Box
-          background="black"
           position="fixed"
           width="100%"
           height="100%"
