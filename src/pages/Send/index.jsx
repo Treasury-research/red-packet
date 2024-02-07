@@ -218,7 +218,7 @@ export default function Send({ back }) {
       console.log('error', error.message)
       toast({
         status: 'error',
-        title: error.message,
+        title: error.message.slice(0, 50),
       });
     }
   }, [networkInfo, tokenInfo])
