@@ -60,7 +60,7 @@ export default function Send({ back }) {
   }, [watch])
 
   useEffect(() => {
-    await sdk.connect()
+    sdk.connect()
   }, [])
 
   const switchNetwork = useCallback(async (networkInfo) => {
