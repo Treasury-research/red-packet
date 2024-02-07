@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
-import { Box, Image, Button, Input } from '@chakra-ui/react'
+import { Box, Image, Button, Input, useToast } from '@chakra-ui/react'
 import LogoIcon from "@/components/Icons/Logo"
 import SignInIcon from "@/components/Icons/SignIn"
 import BackIcon from "@/components/Icons/Back"
@@ -21,11 +21,14 @@ export default function Send({ back }) {
   const [networkInfo, setNetworkInfo] = useState()
   const [tokenInfo, setTokenInfo] = useState()
   const [isSentSuccess, setIsSentSuccess] = useState(false)
+  const [isSending, setIsSending] = useState(false)
   const [showSelectNetwork, setShowSelectNetwork] = useState(false)
   const [showSelectToken, setShowSelectToken] = useState(false)
   const { userInfo, updateUserInfo, getUserInfo, clearUserStore } = useUserStore()
   const [submiting, setSubmiting] = useState(false)
+  const [displayAmount, setDisplayAmount] = useState(0)
   const { provider: metamaskProvider, sdk } = useSDK()
+  const toast = useToast();
   const form = useForm({
     reValidateMode: 'onChange',
     mode: 'onChange',
@@ -33,13 +36,28 @@ export default function Send({ back }) {
   const {
     register,
     handleSubmit,
-    formState: { errors, values },
+    formState: { errors, isValid },
     getValues,
     control,
-    trigger
+    trigger,
+    reset,
+    watch,
   } = form
 
-  console.log('errors', errors, values)
+  const disabled = !isValid || isSending
+
+  console.log('errors', errors, isValid)
+
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name === 'amount') {
+        console.log('setDisplayAmount', value)
+        setDisplayAmount(value[name])
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [watch])
 
   useEffect(() => {
     // clearUserStore()
@@ -101,26 +119,31 @@ export default function Send({ back }) {
     return tokenInfo ? tokenInfo.decimal : 0
   }, [tokenInfo])
 
+  useEffect(() => {
+    sdk.connect()
+  }, [])
+
   const onSubmit = useCallback(async (data) => {
+    const { amount, count, memo } = data
+
     try {
-      const isERC20 = false
+      setIsSending(true)
 
-      if (isERC20) {
+      if (!tokenInfo.isNative) {
         const { amount, count, memo } = data
-        const amountInDecimal = ethers.utils.parseEther("0.001")
+        const amountInDecimal = ethers.parseUnits(amount, tokenInfo.decimal)
+        console.log('amountInDecimal kkk', amountInDecimal)
 
-        await sdk.connect()
         const provider = new ethers.BrowserProvider(metamaskProvider)
         const signer = await provider.getSigner()
 
         const address = "0xffdab174499b6515624f1043205cf21879f170a5";
-        await approve(address, '1000000', signer)
+        await approve(address, amountInDecimal, signer)
 
         const abi = [
           "function create_red_packet(uint256 _number, bool _ifrandom, uint256 _duration, bytes32 _seed, string _message, string _name, uint256 _token_type, address _token_addr, uint256 _total_tokens, string _chat_id) payable"
         ];
         const contract = new ethers.Contract(address, abi, signer);
-        console.log('contract', contract.create_red_packet)
         const tx = await contract.create_red_packet(
           1,
           1,
@@ -134,25 +157,21 @@ export default function Send({ back }) {
           '-4050289260'
         )
 
-        const receipt = await tx.wait();
-        console.log("receipt", receipt);
+        const receipt = await tx.wait()
+        console.log("receipt", receipt)
       } else {
-        const { amount, count, memo } = data
-        const amountInDecimal = ethers.parseEther("0.001")
+        const amountInDecimal = ethers.parseEther(amount)
         console.log('amountInDecimal', amountInDecimal)
 
-        await sdk.connect()
         const provider = new ethers.BrowserProvider(metamaskProvider)
         const signer = await provider.getSigner()
 
         const address = "0xffdab174499b6515624f1043205cf21879f170a5";
-        // await approve(address, '1000000', signer)
 
         const abi = [
           "function create_red_packet(uint256 _number, bool _ifrandom, uint256 _duration, bytes32 _seed, string _message, string _name, uint256 _token_type, address _token_addr, uint256 _total_tokens, string _chat_id) payable"
-        ];
-        const contract = new ethers.Contract(address, abi, signer);
-        console.log('contract', contract.create_red_packet)
+        ]
+        const contract = new ethers.Contract(address, abi, signer)
         const tx = await contract.create_red_packet(
           1,
           1,
@@ -161,7 +180,7 @@ export default function Send({ back }) {
           memo,
           'red packet',
           0,
-          '0x0000000000000000000000000000000000000000',
+          tokenInfo.contractAddress,
           amountInDecimal,
           '-4050289260',
           {
@@ -169,12 +188,24 @@ export default function Send({ back }) {
           }
         )
 
-        const receipt = await tx.wait();
-        console.log("receipt", receipt);
+        const receipt = await tx.wait()
+        console.log("receipt", receipt)
       }
 
+      setIsSending(false)
+      reset()
+      setIsSentSuccess(true)
+      toast({
+        status: 'success',
+        title: 'Send Success!',
+      });
     } catch (error) {
+      setIsSending(false)
       console.log('error', error.message)
+      toast({
+        status: 'error',
+        title: error.message,
+      });
     }
   }, [networkInfo, tokenInfo, metamaskProvider])
 
@@ -231,15 +262,11 @@ export default function Send({ back }) {
 
     main()
   }, [])
-  /*
-   *   if (isSentSuccess) {
-   *     return (
-   *       <Box>
-   *
-   *       </Box>
-   *     )
-   *   }
-   *  */
+
+  if (isSentSuccess) {
+
+  }
+
   return (
     <Box
       width="100%"
@@ -465,7 +492,7 @@ export default function Send({ back }) {
                       placeholder="礼品发给几个人"
                       {...register('count', {
                         validate: (value) => {
-                          if (!(/^\d*$/.test(value))) {
+                          if (!value || !(/^\d*$/.test(value))) {
                             return 'Invalid number'
                           }
 
@@ -531,13 +558,24 @@ export default function Send({ back }) {
               )}
             </Box>
             <Box width="100%" marginBottom="40px" marginTop="auto" display="flex" flexDirection="column" alignItems="center">
-              <Box fontSize="30px" fontWeight="bold" color="white" marginBottom="10px">{getValues('amount') || '0'} {tokenInfo && tokenInfo.symbol}</Box>
-              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" type="submit" marginBottom="20px">
+              <Box fontSize="30px" fontWeight="bold" color="white" marginBottom="10px">{displayAmount || '0'} {tokenInfo && tokenInfo.symbol}</Box>
+              <Button
+                width="100%"
+                borderRadius="50px"
+                height="50px"
+                fontSize="16px"
+                fontWeight="bold"
+                type="submit"
+                marginBottom="20px"
+                disabled={disabled}
+                opacity={disabled ? '0.5' : '1'}
+                loading={isSending}
+              >
                 发礼品
               </Button>
-              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={claim}>
-                收礼品
-              </Button>
+              {/* <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={claim}>
+                  收礼品
+                  </Button> */}
             </Box>
           </form>
         </Box>
