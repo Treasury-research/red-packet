@@ -92,9 +92,17 @@ export default function Send({ back }) {
           })
 
           setNetworkInfo(networkInfo)
-        } catch (addError) {
-
+        } catch (error) {
+          toast({
+            status: 'error',
+            title: error.message,
+          });
         }
+      } else {
+        toast({
+          status: 'error',
+          title: switchError.message,
+        });
       }
     }
   }, [metamaskProvider])
