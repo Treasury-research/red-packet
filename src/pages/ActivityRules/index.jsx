@@ -42,7 +42,6 @@ export default function ActivityRules({ back }) {
         width="100%"
         height="100%"
         paddingTop="44px"
-        overflowY="scroll"
       >
         <Box
           width="100%"
@@ -59,7 +58,13 @@ export default function ActivityRules({ back }) {
             <Image src={GiftImage} />
           </Box>
         </Box>
-        <Box width="100%" height="100%" background="white" padding="24px">
+        <Box
+          width="100%"
+          height="calc(100% - 150px)"
+          background="white"
+          padding="24px"
+          overflowY="scroll"
+        >
           <Box fontSize="14px" color="#4E4E53" marginBottom="12px">1. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</Box>
           <Box fontSize="14px" color="#4E4E53" marginBottom="12px">2.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</Box>
           <Box fontSize="14px" color="#4E4E53" marginBottom="12px">3.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</Box>
