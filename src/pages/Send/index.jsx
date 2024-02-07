@@ -92,7 +92,11 @@ export default function Send({ back }) {
               chainId: networkInfo.chainId,
               chainName: networkInfo.chainName,
               rpcUrls: networkInfo.rpcUrls,
-              currencySymbol: networkInfo.currencySymbol,
+              nativeCurrency: {
+                name: networkInfo.currencySymbol,
+                symbol: networkInfo.currencySymbol,
+                decimals: networkInfo.currencyDecimal
+              }
             }],
           })
 

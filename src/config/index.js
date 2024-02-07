@@ -4,12 +4,12 @@ export const networkList = [
     chainName: 'Mumbai',
     rpcUrls: ['https://rpc-mumbai.maticvigil.com'],
     currencySymbol: 'MATIC',
-    currencyDecimal: 9,
+    currencyDecimal: 18,
     tokenList: [
       {
         isNative: true,
         contractAddress: '0x0000000000000000000000000000000000000000',
-        decimal: 9,
+        decimal: 18,
         symbol: 'MATIC',
         name: 'Matic'
       },
