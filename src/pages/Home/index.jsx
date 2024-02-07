@@ -102,9 +102,10 @@ export default function Home() {
       await sdk.connect()
       const { amount, count, memo } = data
       const token = userInfo.token
+      const redPacketId = userInfo.redPacketId
 
       const message = await api.sign({
-        id: `0x12f83ba2cad64bcb03015dee6ba0ae57040b020ddf84789fa8e193a345615391`,
+        id: redPacketId,
         address: `0xb864163E3491F7cabaBFbABAF94eF3034572594d`
       }, {
         requireAuth: true,
@@ -123,7 +124,7 @@ export default function Home() {
 
       const contract = new ethers.Contract(address, abi, signer);
       const tx = await contract.claim(
-        `0x12f83ba2cad64bcb03015dee6ba0ae57040b020ddf84789fa8e193a345615391`,
+        redPacketId,
         message,
         `0xb864163E3491F7cabaBFbABAF94eF3034572594d`
       );
@@ -143,7 +144,7 @@ export default function Home() {
         title: error.message,
       });
     }
-  }, [metamaskProvider, userInfo])
+  }, [userInfo])
 
   if (activePage === 'activityRules') {
     return (
