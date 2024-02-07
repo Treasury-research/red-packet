@@ -5,13 +5,17 @@ import SignInIcon from "@/components/Icons/SignIn"
 import BackIcon from "@/components/Icons/Back"
 import ArrowDownIcon from "@/components/Icons/ArrowDown"
 import GiftImage from "@/assets/images/gift-bg.png"
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useUserStore } from '@/store/user'
 import { Popup } from 'react-vant'
 import { ethers, BrowserProvider } from 'ethers'
 import { useSDK } from '@metamask/sdk-react'
 import * as api from '@/api'
 import { networkList } from '@/config'
+
+const numberRe = (decimalPlaces) => decimalPlaces ? new RegExp(`^\\s*(\\d+(\\.(\\d{1,${decimalPlaces}})?)?|(\\.\\d{1,${decimalPlaces}}))\\s*$`) : new RegExp(`^\\s*(\\d+)\\s*$`)
+const validateUnit = (value, decimalPlaces) => (!!value && !!value.trim() && numberRe(decimalPlaces).test(value))
+export const validateUnitByFraction = (fraction) => (value) => validateUnit(value, fraction)
 
 export default function Send({ back }) {
   const [networkInfo, setNetworkInfo] = useState()
@@ -22,16 +26,24 @@ export default function Send({ back }) {
   const { userInfo, updateUserInfo, getUserInfo, clearUserStore } = useUserStore()
   const [submiting, setSubmiting] = useState(false)
   const { provider: metamaskProvider, sdk } = useSDK()
-  const form = useForm()
+  const form = useForm({
+    reValidateMode: 'onChange',
+    mode: 'onChange',
+  })
   const {
     register,
     handleSubmit,
-    formState,
+    formState: { errors, values },
     getValues,
+    control,
+    trigger
   } = form
+
+  console.log('errors', errors, values)
 
   useEffect(() => {
     // clearUserStore()
+    // trigger()
   }, [])
 
   const switchNetwork = useCallback(async (networkInfo) => {
@@ -83,6 +95,10 @@ export default function Send({ back }) {
     const tx = await contract.approve(address, amount)
     const receipt = await tx.wait()
     console.log("approve receipt", receipt)
+  }, [tokenInfo])
+
+  const getTokenDecimal = useCallback(() => {
+    return tokenInfo ? tokenInfo.decimal : 0
   }, [tokenInfo])
 
   const onSubmit = useCallback(async (data) => {
@@ -284,7 +300,9 @@ export default function Send({ back }) {
           display="flex"
           flexDirection="column"
         >
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Box
               width="100%"
               display="flex"
@@ -365,8 +383,16 @@ export default function Send({ back }) {
                       boxShadow="none !important"
                       border="none"
                       placeholder="发多少"
-                      {...register('amount')}
-                    />
+                      {...register('amount', {
+                        validate: (value) => {
+                          if (!(/^\s*[+-]?(\d+|\d*\.\d+|\d+\.\d*)([Ee][+-]?\d+)?\s*$/.test(value))) {
+                            return 'Invalid amount'
+                          }
+
+                          return null
+                        }
+                      })}
+                      />
                   </Box>
                 </Box>
                 <Box width="70px">
@@ -394,6 +420,17 @@ export default function Send({ back }) {
                   </Box>
                 </Box>
               </Box>
+              {errors.amount && (
+                <Box
+                  color="red"
+                  fontSize="14px"
+                  padding="0 20px"
+                  marginBottom="14px"
+                  textAlign="right"
+                >
+                  {errors.amount.message}
+                </Box>
+              )}
               <Box
                 color="#A7A7A9"
                 fontSize="14px"
@@ -426,11 +463,30 @@ export default function Send({ back }) {
                       borderWidth="0"
                       boxShadow="none !important"
                       placeholder="礼品发给几个人"
-                      {...register('count')}
-                    />
+                      {...register('count', {
+                        validate: (value) => {
+                          if (!(/^\d*$/.test(value))) {
+                            return 'Invalid number'
+                          }
+
+                          return null
+                        }
+                      })}
+                      />
                   </Box>
                 </Box>
               </Box>
+              {errors.count && (
+                <Box
+                  color="red"
+                  fontSize="14px"
+                  padding="0 20px"
+                  marginBottom="14px"
+                  textAlign="right"
+                >
+                  {errors.count.message}
+                </Box>
+              )}
               <Box color="#A7A7A9" fontSize="14px" padding="0 20px" marginBottom="14px">每人领到随机金额，改为 <Box as="span" color="white">平均金额</Box></Box>
               <Box
                 background="white"
@@ -450,10 +506,29 @@ export default function Send({ back }) {
                     padding="0"
                     boxShadow="none !important"
                     placeholder="备注"
-                    {...register('memo')}
-                  />
+                    {...register('memo', {
+                      validate: (value) => {
+                        if (value && value.length > 50) {
+                          return 'The memo is too long.'
+                        }
+
+                        return null
+                      }
+                    })}
+                    />
                 </Box>
               </Box>
+              {errors.memo && (
+                <Box
+                  color="red"
+                  fontSize="14px"
+                  padding="0 20px"
+                  marginBottom="14px"
+                  marginTop="6px"
+                >
+                  {errors.memo.message}
+                </Box>
+              )}
             </Box>
             <Box width="100%" marginBottom="40px" marginTop="auto" display="flex" flexDirection="column" alignItems="center">
               <Box fontSize="30px" fontWeight="bold" color="white" marginBottom="10px">{getValues('amount') || '0'} {tokenInfo && tokenInfo.symbol}</Box>
@@ -496,9 +571,10 @@ export default function Send({ back }) {
             />
           </Box>
           {networkList.map((network) =>
-            <Box>
+            <Box
+              key={network.chainId}
+            >
               <Box
-                key={network.chainId}
                 onClick={() => switchNetwork(network)}
                 width="100%"
                 height="44px"
@@ -560,9 +636,10 @@ export default function Send({ back }) {
             />
           </Box>
           {networkInfo && networkInfo.tokenList.map((token) =>
-            <Box>
+            <Box
+              key={token.contractAddress}
+            >
               <Box
-                key={token.contractAddress}
                 onClick={() => switchToken(token)}
                 width="100%"
                 height="44px"
