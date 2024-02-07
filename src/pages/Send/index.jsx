@@ -69,6 +69,7 @@ export default function Send({ back }) {
     } = networkInfo
 
     setShowSelectNetwork(false)
+    await sdk.connect()
     const ethereum = window.ethereum
 
     try {
