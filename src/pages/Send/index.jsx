@@ -143,7 +143,7 @@ export default function Send({ back }) {
 
     try {
       setIsSending(true)
-      if (!metamaskProvider) await sdk.connect()
+      await sdk.connect()
 
       if (!tokenInfo.isNative) {
         const { amount, count, memo } = data
