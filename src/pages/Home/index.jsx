@@ -11,6 +11,7 @@ import ActivityRules from '@/pages/ActivityRules'
 import Send from '@/pages/Send'
 import BindAddress from '@/pages/BindAddress'
 import * as api from '@/api'
+import { ethers, BrowserProvider } from 'ethers'
 
 export default function Home() {
   const [intent, setIntent] = useState('send')
