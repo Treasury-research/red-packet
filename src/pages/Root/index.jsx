@@ -120,6 +120,7 @@ export default function Root() {
    *     height="100%"
    *     top="0"
    *     left="0"
+   *     background="linear-gradient(to bottom, #0D1320, #0C1845)"
    *   >
    *     <Box
    *       position="fixed"
@@ -167,6 +168,7 @@ export default function Root() {
           top="0"
           left="0"
           overflowY="scroll"
+          background="linear-gradient(to bottom, #0D1320, #0C1845)"
         >
           <Box
             position="fixed"

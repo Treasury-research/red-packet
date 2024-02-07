@@ -59,7 +59,6 @@ export default function BindAddress({ back }) {
       <Box
         width="100%"
         height="100%"
-        background="linear-gradient(to bottom, #0D1320, #0C1845)"
         position="relative"
       >
         <Box
@@ -94,7 +93,6 @@ export default function BindAddress({ back }) {
           >
             <Box
               borderRadius="10px"
-              background="linear-gradient(0deg, #1F2861 0%, #30486D 89.32%)"
               padding="20px"
               marginTop="40px"
               marginBottom="40px"
@@ -141,7 +139,6 @@ export default function BindAddress({ back }) {
     <Box
       width="100%"
       height="100%"
-      background="linear-gradient(to bottom, #0D1320, #0C1845)"
       position="relative"
     >
       <Box
@@ -176,7 +173,6 @@ export default function BindAddress({ back }) {
         >
           <Box
             borderRadius="10px"
-            background="linear-gradient(0deg, #1F2861 0%, #30486D 89.32%)"
             padding="20px"
             marginTop="40px"
           >

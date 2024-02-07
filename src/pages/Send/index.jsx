@@ -10,6 +10,7 @@ import { useUserStore } from '@/store/user'
 import { Popup } from 'react-vant'
 import { ethers, BrowserProvider } from 'ethers'
 import { useSDK } from '@metamask/sdk-react'
+import * as api from '@/api'
 
 export default function Send({ back }) {
   const [tokenInfo, setTokenInfo] = useState()
@@ -29,7 +30,7 @@ export default function Send({ back }) {
   } = form
 
   useEffect(() => {
-    clearUserStore()
+    // clearUserStore()
   }, [])
 
   const switchNetwork = useCallback(async () => {
@@ -92,43 +93,133 @@ export default function Send({ back }) {
 
   const onSubmit = useCallback(async (data) => {
     try {
+      const isERC20 = false
+
+      if (isERC20) {
+        const { amount, count, memo } = data
+        const amountInDecimal = ethers.utils.parseEther("0.001")
+
+        await sdk.connect()
+        const provider = new ethers.BrowserProvider(metamaskProvider)
+        const signer = await provider.getSigner()
+
+        const address = "0xffdab174499b6515624f1043205cf21879f170a5";
+        await approve(address, '1000000', signer)
+
+        const abi = [
+          "function create_red_packet(uint256 _number, bool _ifrandom, uint256 _duration, bytes32 _seed, string _message, string _name, uint256 _token_type, address _token_addr, uint256 _total_tokens, string _chat_id) payable"
+        ];
+        const contract = new ethers.Contract(address, abi, signer);
+        console.log('contract', contract.create_red_packet)
+        const tx = await contract.create_red_packet(
+          1,
+          1,
+          60 * 60 * 24,
+          '0xb4ea3b98caa0037b5a71b6a10179f2be9f9f3c3e1ce6e2ab635c1e07169cbd49',
+          memo,
+          'red packet',
+          1,
+          tokenInfo.contractAddress,
+          amountInDecimal,
+          '-4050289260'
+        )
+
+        const receipt = await tx.wait();
+        console.log("receipt", receipt);
+      } else {
+        const { amount, count, memo } = data
+        const amountInDecimal = ethers.parseEther("0.001")
+        console.log('amountInDecimal', amountInDecimal)
+
+        await sdk.connect()
+        const provider = new ethers.BrowserProvider(metamaskProvider)
+        const signer = await provider.getSigner()
+
+        const address = "0xffdab174499b6515624f1043205cf21879f170a5";
+        // await approve(address, '1000000', signer)
+
+        const abi = [
+          "function create_red_packet(uint256 _number, bool _ifrandom, uint256 _duration, bytes32 _seed, string _message, string _name, uint256 _token_type, address _token_addr, uint256 _total_tokens, string _chat_id) payable"
+        ];
+        const contract = new ethers.Contract(address, abi, signer);
+        console.log('contract', contract.create_red_packet)
+        const tx = await contract.create_red_packet(
+          1,
+          1,
+          60 * 60 * 24,
+          '0xb4ea3b98caa0037b5a71b6a10179f2be9f9f3c3e1ce6e2ab635c1e07169cbd49',
+          memo,
+          'red packet',
+          0,
+          '0x0000000000000000000000000000000000000000',
+          amountInDecimal,
+          '-4050289260',
+          {
+            value: amountInDecimal
+          }
+        )
+
+        const receipt = await tx.wait();
+        console.log("receipt", receipt);
+      }
+
+    } catch (error) {
+      console.log('error', error.message)
+    }
+  }, [networkInfo, tokenInfo, metamaskProvider])
+
+  const claim = useCallback(async (data) => {
+    try {
       const { amount, count, memo } = data
-      const amountInDecimal = String(Number(amount) * Math.pow(10, tokenInfo.decimal))
+      const token = userInfo.token
+
+      const message = await api.sign({
+        id: `0x12f83ba2cad64bcb03015dee6ba0ae57040b020ddf84789fa8e193a345615391`,
+        address: `0xb864163E3491F7cabaBFbABAF94eF3034572594d`
+      }, {
+        requireAuth: true,
+        tokenFetcher: () => token
+      })
+      console.log('message', message)
 
       await sdk.connect()
       const provider = new ethers.BrowserProvider(metamaskProvider)
       const signer = await provider.getSigner()
 
-      const address = "0xffdab174499b6515624f1043205cf21879f170a5";
-      await approve(address, '1000000', signer)
-
+      const address = '0xffdab174499b6515624f1043205cf21879f170a5';
       const abi = [
-        "function create_red_packet(uint256 _number, bool _ifrandom, uint256 _duration, bytes32 _seed, string _message, string _name, uint256 _token_type, address _token_addr, uint256 _total_tokens, string _chat_id) payable"
+        `function claim(bytes32 id, bytes signedMsg, address recipient) returns (uint256 claimed)`
       ];
+
       const contract = new ethers.Contract(address, abi, signer);
-      console.log('contract', contract.create_red_packet)
-      const tx = await contract.create_red_packet(
-        1,
-        1,
-        60 * 60 * 24,
-        '0xb4ea3b98caa0037b5a71b6a10179f2be9f9f3c3e1ce6e2ab635c1e07169cbd49',
-        memo,
-        'red packet',
-        1,
-        tokenInfo.contractAddress,
-        amountInDecimal,
-        '-4050289260'
-      )
+      const tx = await contract.claim(
+        `0x12f83ba2cad64bcb03015dee6ba0ae57040b020ddf84789fa8e193a345615391`,
+        message,
+        `0xb864163E3491F7cabaBFbABAF94eF3034572594d`
+      );
 
       const receipt = await tx.wait();
       console.log("receipt", receipt);
     } catch (error) {
       console.log('error', error.message)
     }
-  }, [networkInfo, tokenInfo, metamaskProvider])
+  }, [networkInfo, tokenInfo, metamaskProvider, userInfo])
 
   useEffect(() => {
+    const main = async () => {
+      const token = userInfo.token
 
+      const data = await api.getClaimHistory({
+        pageNumber: 0,
+        pageSize: 20
+      }, {
+        requireAuth: true,
+        tokenFetcher: () => token
+      })
+      console.log('getClaimHistory', data)
+    }
+
+    main()
   }, [])
   /*
    *   if (isSentSuccess) {
@@ -143,7 +234,6 @@ export default function Send({ back }) {
     <Box
       width="100%"
       height="100%"
-      background="linear-gradient(to bottom, #0D1320, #0C1845)"
       position="relative"
     >
       <Box
@@ -373,8 +463,11 @@ export default function Send({ back }) {
             </Box>
             <Box width="100%" marginBottom="40px" marginTop="auto" display="flex" flexDirection="column" alignItems="center">
               <Box fontSize="30px" fontWeight="bold" color="white" marginBottom="10px">{getValues('amount') || '0.0000'} {tokenInfo && tokenInfo.symbol}</Box>
-              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" type="submit">
+              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" type="submit" marginBottom="20px">
                 发礼品
+              </Button>
+              <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={claim}>
+                收礼品
               </Button>
             </Box>
           </form>
