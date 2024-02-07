@@ -18,8 +18,9 @@ export default function Home() {
   const [isShowRules, setIsShowRules] = useState(false)
   const [isLogingIn, setIsLogingIn] = useState(false)
   const [account, setAccount] = useState('test')
-  const { sdk, connected, connecting, provider, chainId } = useSDK()
+  const { sdk, connected, connecting, provider: metamaskProvider, chainId } = useSDK()
   const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
+  const [isClaiming, setIsClaiming] = useState(false)
   const isSignedIn = !!userInfo && !!userInfo.token
   const toast = useToast();
   console.log('userInfo', userInfo, connecting)
@@ -94,9 +95,53 @@ export default function Home() {
     }
   }, [sdk])
 
-  useEffect(() => {
+  const claim = useCallback(async (data) => {
+    try {
+      setIsClaiming(true)
+      const { amount, count, memo } = data
+      const token = userInfo.token
 
-  }, [])
+      const message = await api.sign({
+        id: `0x12f83ba2cad64bcb03015dee6ba0ae57040b020ddf84789fa8e193a345615391`,
+        address: `0xb864163E3491F7cabaBFbABAF94eF3034572594d`
+      }, {
+        requireAuth: true,
+        tokenFetcher: () => token
+      })
+      console.log('message', message)
+
+      await sdk.connect()
+      const provider = new ethers.BrowserProvider(metamaskProvider)
+      const signer = await provider.getSigner()
+
+      const address = '0xffdab174499b6515624f1043205cf21879f170a5';
+      const abi = [
+        `function claim(bytes32 id, bytes signedMsg, address recipient) returns (uint256 claimed)`
+      ];
+
+      const contract = new ethers.Contract(address, abi, signer);
+      const tx = await contract.claim(
+        `0x12f83ba2cad64bcb03015dee6ba0ae57040b020ddf84789fa8e193a345615391`,
+        message,
+        `0xb864163E3491F7cabaBFbABAF94eF3034572594d`
+      );
+
+      const receipt = await tx.wait();
+      console.log("receipt", receipt);
+      setIsClaiming(false)
+      toast({
+        status: 'success',
+        title: 'Claim Success!',
+      });
+    } catch (error) {
+      setIsClaiming(false)
+      console.log('error', error.message)
+      toast({
+        status: 'error',
+        title: error.message,
+      });
+    }
+  }, [metamaskProvider, userInfo])
 
   if (activePage === 'activityRules') {
     return (
@@ -208,24 +253,10 @@ export default function Home() {
                   height="50px"
                   fontSize="16px"
                   fontWeight="bold"
-                  onClick={() => {}}
+                  onClick={claim}
                 >
                   领取礼品
                 </Button>
-              </Box>
-              <Box width="100%">
-                <Box
-                  width="100%"
-                  height="50px"
-                  fontSize="16px"
-                  fontWeight="bold"
-                  color="white"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  {`历史记录 >`}
-                </Box>
               </Box>
             </Box>
           )}

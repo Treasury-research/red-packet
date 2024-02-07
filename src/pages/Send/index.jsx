@@ -138,10 +138,6 @@ export default function Send({ back }) {
     return tokenInfo ? tokenInfo.decimal : 0
   }, [tokenInfo])
 
-  useEffect(() => {
-    sdk.connect()
-  }, [])
-
   const onSubmit = useCallback(async (data) => {
     const { amount, count, memo } = data
 
@@ -229,43 +225,6 @@ export default function Send({ back }) {
     }
   }, [networkInfo, tokenInfo, metamaskProvider])
 
-  const claim = useCallback(async (data) => {
-    try {
-      const { amount, count, memo } = data
-      const token = userInfo.token
-
-      const message = await api.sign({
-        id: `0x12f83ba2cad64bcb03015dee6ba0ae57040b020ddf84789fa8e193a345615391`,
-        address: `0xb864163E3491F7cabaBFbABAF94eF3034572594d`
-      }, {
-        requireAuth: true,
-        tokenFetcher: () => token
-      })
-      console.log('message', message)
-
-      await sdk.connect()
-      const provider = new ethers.BrowserProvider(metamaskProvider)
-      const signer = await provider.getSigner()
-
-      const address = '0xffdab174499b6515624f1043205cf21879f170a5';
-      const abi = [
-        `function claim(bytes32 id, bytes signedMsg, address recipient) returns (uint256 claimed)`
-      ];
-
-      const contract = new ethers.Contract(address, abi, signer);
-      const tx = await contract.claim(
-        `0x12f83ba2cad64bcb03015dee6ba0ae57040b020ddf84789fa8e193a345615391`,
-        message,
-        `0xb864163E3491F7cabaBFbABAF94eF3034572594d`
-      );
-
-      const receipt = await tx.wait();
-      console.log("receipt", receipt);
-    } catch (error) {
-      console.log('error', error.message)
-    }
-  }, [networkInfo, tokenInfo, metamaskProvider, userInfo])
-
   useEffect(() => {
     const main = async () => {
       const token = userInfo.token
@@ -282,10 +241,6 @@ export default function Send({ back }) {
 
     main()
   }, [])
-
-  if (isSentSuccess) {
-
-  }
 
   return (
     <Box
