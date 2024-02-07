@@ -84,7 +84,7 @@ export default function Send({ back }) {
 
       setNetworkInfo(networkInfo)
     } catch (switchError) {
-      if (switchError.code === 4902 || switchError.message.indexOf('try add') !== -1) {
+      if (switchError.code === 4902 || switchError.message.indexOf('Try add') !== -1) {
         try {
           await ethereum.request({
             method: 'wallet_addEthereumChain',
