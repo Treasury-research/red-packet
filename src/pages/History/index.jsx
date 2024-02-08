@@ -62,7 +62,7 @@ function HistoryList({ list }) {
         marginTop="0px"
       >
         {list1.map(item =>
-          <Box display="flex" cursor="pointer" key={item.id}>
+          <Box display="flex" cursor="pointer" key={item.id} marginBottom="14px">
             <Box>
 
             </Box>
@@ -70,7 +70,7 @@ function HistoryList({ list }) {
               <Box color="#222228" fontSize="14px">{toShortAddress(item.claimer)}</Box>
               <Box color="#A7A7A9" fontSize="12px">{item.created_at}</Box>
             </Box>
-            <Box paddingRight="14px">
+            <Box paddingRight="14px" display="flex" flexDirection="column" alignItems="flex-end">
               <Box color="#222228" fontSize="14px">{item.claimed_value}</Box>
               <Box color="#A7A7A9" fontSize="12px">已领取</Box>
             </Box>
@@ -117,6 +117,7 @@ export default function History({ onBack }) {
         width="100%"
         height="100%"
         background="white"
+        paddingTop="44px"
       >
         {!loaded && (
           <Box
