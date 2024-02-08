@@ -8,39 +8,18 @@ import { useSDK } from '@metamask/sdk-react'
 import { redPacketApi } from '@/api'
 import { useUserStore } from '@/store/user'
 import * as api from '@/api'
+import Screen from '@/components/Screen'
 
-export default function ActivityRules({ back }) {
+export default function ActivityRules({ onBack }) {
+  console.log('onBack ActivityRules', onBack)
   return (
-    <Box
-      width="100%"
-      height="100%"
-      position="relative"
+    <Screen
+      onBack={onBack}
     >
-      <Box
-        position="absolute"
-        top="0"
-        left="0"
-        color="white"
-        width="100%"
-        height="44px"
-        zIndex="2"
-      >
-        <Box
-          width="100%"
-          height="100%"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          padding="0 32px"
-        >
-          <Box marginRight="auto" onClick={back} cursor="pointer">
-            <BackIcon />
-          </Box>
-        </Box>
-      </Box>
       <Box
         width="100%"
         height="100%"
+        paddingTop="44px"
       >
         <Box
           width="100%"
@@ -71,6 +50,6 @@ export default function ActivityRules({ back }) {
           <Box fontSize="14px" color="#4E4E53" marginBottom="12px">5.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</Box>
         </Box>
       </Box>
-    </Box>
+    </Screen>
   )
 }
