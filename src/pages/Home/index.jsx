@@ -9,6 +9,7 @@ import { redPacketApi } from '@/api'
 import { useUserStore } from '@/store/user'
 import ActivityRules from '@/pages/ActivityRules'
 import Send from '@/pages/Send'
+import History from '@/pages/History'
 import BindAddress from '@/pages/BindAddress'
 import * as api from '@/api'
 import { ethers, BrowserProvider } from 'ethers'
@@ -166,6 +167,12 @@ export default function Home() {
     )
   }
 
+  if (activePage === 'history') {
+    return (
+      <History onBack={() => setActivePage('home')} />
+    )
+  }
+
   const disabled = isLogingIn
   const loading = isLogingIn
 
@@ -264,6 +271,7 @@ export default function Home() {
                 alignItems="center"
                 justifyContent="center"
                 cursor="pointer"
+                onClick={() => setActivePage('history')}
               >
                 {`历史记录 >`}
               </Box>

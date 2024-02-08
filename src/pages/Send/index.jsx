@@ -224,23 +224,6 @@ export default function Send() {
     }
   }, [networkInfo, tokenInfo])
 
-  useEffect(() => {
-    const main = async () => {
-      const token = userInfo.token
-
-      const data = await api.getClaimHistory({
-        pageNumber: 0,
-        pageSize: 20
-      }, {
-        requireAuth: true,
-        tokenFetcher: () => token
-      })
-      console.log('getClaimHistory', data)
-    }
-
-    main()
-  }, [])
-
   return (
     <Screen>
       <Box

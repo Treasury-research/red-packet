@@ -12,151 +12,125 @@ import Send from '@/pages/Send'
 import BindAddress from '@/pages/BindAddress'
 import * as api from '@/api'
 import { ethers, BrowserProvider } from 'ethers'
+import Screen from '@/components/Screen'
 
-export default function Home() {
-  const [intent, setIntent] = useState('send')
-  const [activePage, setActivePage] = useState('home')
-  const [isShowRules, setIsShowRules] = useState(false)
-  const [isLogingIn, setIsLogingIn] = useState(false)
-  const [account, setAccount] = useState('test')
-  const { sdk, connected, connecting, provider: metamaskProvider, chainId } = useSDK()
-  const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
-  const [isClaiming, setIsClaiming] = useState(false)
-  const isSignedIn = !!userInfo && !!userInfo.token
-  const toast = useToast();
-  console.log('userInfo', userInfo, connecting)
+export const toShortAddress = (address, firstSlice = 6, lastSlice = 4) => {
+  if (address.length > 10) {
+    return `${address.slice(0, firstSlice)}...${address.slice(-lastSlice)}`
+  }
 
-  const disabled = isLogingIn
-  const loading = isLogingIn
+  return address
+}
+
+function HistoryList({ list }) {
+  const [activeSection, setActiveSection] = useState('receive')
+  const list1 = list || []
+  const list2 = []
+  console.log('list1', list1)
 
   return (
-    <Box
-      width="100%"
-      height="100%"
-      position="relative"
-    >
-      <Box
-        position="absolute"
-        top="0"
-        left="0"
-        color="white"
-        width="100%"
-        height="44px"
-      >
+    <Box padding="20px 40px">
+      <Box display="flex" fontSize="14px">
         <Box
-          width="100%"
-          height="100%"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
+          color="black"
+          cursor="pointer"
+          padding="0 5px"
+          borderBottom="1px solid black"
+          marginRight="10px"
         >
-          Digital gifts
+          我收到的
+        </Box>
+        <Box
+          color="#7A7A7E"
+          cursor="pointer"
+          padding="0 5px"
+        >
+          我发出的
         </Box>
       </Box>
+      <Box
+        width="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height="100px"
+        color="#7A7A7E"
+      >
+        共收到<Box color="black" fontWeight="bold">{list1.length}</Box>份礼物
+      </Box>
+      <Box
+        marginTop="0px"
+      >
+        {list1.map(item =>
+          <Box display="flex" cursor="pointer" key={item.id}>
+            <Box>
+
+            </Box>
+            <Box marginRight="auto">
+              <Box color="#222228" fontSize="14px">{toShortAddress(item.claimer)}</Box>
+              <Box color="#A7A7A9" fontSize="12px">{item.created_at}</Box>
+            </Box>
+            <Box paddingRight="14px">
+              <Box color="#222228" fontSize="14px">{item.claimed_value}</Box>
+              <Box color="#A7A7A9" fontSize="12px">已领取</Box>
+            </Box>
+          </Box>
+        )}
+      </Box>
+    </Box>
+  )
+}
+
+export default function History({ onBack }) {
+  const [history, setHistory] = useState([])
+  const [loaded, setLoaded] = useState(false)
+
+  const {
+    userInfo,
+    updateUserInfo,
+    getUserInfo,
+    clearUserStore
+  } = useUserStore()
+
+  useEffect(() => {
+    const main = async () => {
+      const token = userInfo.token
+
+      const res = await api.getClaimHistory({
+        pageNumber: 0,
+        pageSize: 20
+      }, {
+        requireAuth: true,
+        tokenFetcher: () => token
+      })
+      setHistory(res.data)
+      console.log('getClaimHistory', res.data)
+      setLoaded(true)
+    }
+
+    main()
+  }, [])
+
+  return (
+    <Screen onBack={onBack} title="历史记录">
       <Box
         width="100%"
         height="100%"
-        paddingTop="44px"
+        background="white"
       >
-        <Box
-          width="100%"
-          height="100%"
-          padding="32px"
-          display="flex"
-          flexDirection="column"
-        >
+        {!loaded && (
           <Box
-            borderRadius="10px"
-            background="linear-gradient(0deg, #1F2861 0%, #30486D 89.32%)"
+            color="black"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
             padding="20px"
-            marginTop="40px"
-            marginBottom="40px"
           >
-            <Box marginBottom="20px">
-              <LogoIcon />
-            </Box>
-            <Box
-              fontSize="32px"
-              fontWeight="600"
-              color="white"
-              marginBottom="20px"
-            >
-              Send Digital gifts to your friends !
-            </Box>
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-              <Box color="white" cursor="pointer" onClick={() => setActivePage('activityRules')}>{`活动规则>`}</Box>
-              <Box>
-                <Image src={GiftImage} />
-              </Box>
-            </Box>
+            Loading...
           </Box>
-          {!isSignedIn && (
-            <Box width="100%" marginBottom="40px" marginTop="auto">
-              <Button
-                width="100%"
-                borderRadius="50px"
-                height="50px"
-                fontSize="16px"
-                fontWeight="bold"
-                opacity={(disabled || loading) ? '0.5' : '1'}
-                cursor={(disabled || loading) ? 'disabled' : 'default'}
-                onClick={signIn}
-                loading={loading}
-                disabled={disabled}
-              >
-                <Box marginRight="8px"><SignInIcon /></Box>
-                Sign in
-              </Button>
-            </Box>
-          )}
-          {!!isSignedIn && (intent === 'claim') && (
-            <Box marginTop="auto">
-              <Box width="100%" marginBottom="40px">
-                <Button
-                  width="100%"
-                  borderRadius="50px"
-                  height="50px"
-                  fontSize="16px"
-                  fontWeight="bold"
-                  onClick={claim}
-                >
-                  领取礼品
-                </Button>
-              </Box>
-            </Box>
-          )}
-          {!!isSignedIn && (intent === 'send') && (
-            <Box marginTop="auto">
-              <Box width="100%" marginBottom="40px">
-                <Button
-                  width="100%"
-                  borderRadius="50px"
-                  height="50px"
-                  fontSize="16px"
-                  fontWeight="bold"
-                  onClick={() => setActivePage('send')}
-                >
-                  发群礼品
-                </Button>
-              </Box>
-              <Box width="100%">
-                <Box
-                  width="100%"
-                  height="50px"
-                  fontSize="16px"
-                  fontWeight="bold"
-                  color="white"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  {`历史记录 >`}
-                </Box>
-              </Box>
-            </Box>
-          )}
-        </Box>
+        )}
+        {!!loaded && history && <HistoryList list={history} />}
       </Box>
-    </Box>
+    </Screen>
   )
 }
