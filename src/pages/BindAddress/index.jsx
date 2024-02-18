@@ -10,11 +10,20 @@ import { useUserStore } from '@/store/user'
 import { ethers, BrowserProvider } from 'ethers'
 import Screen from '@/components/Screen'
 
+export const toShortAddress = (address, firstSlice = 6, lastSlice = 4) => {
+  if (address.length > 10) {
+    return `${address.slice(0, firstSlice)}...${address.slice(-lastSlice)}`
+  }
+
+  return address
+}
+
 export default function BindAddress({ onBack }) {
   const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
   const { provider: metamaskProvider, sdk } = useSDK()
   const [isBind, setIsBind] = useState(false)
   const [signature, setSignature] = useState('')
+  const { address } = userInfo
 
   const bindAddress = useCallback(async () => {
     try {
@@ -49,7 +58,7 @@ export default function BindAddress({ onBack }) {
         ...res3,
       })
 
-      back()
+      onBack()
     } catch (error) {
       alert(error.message)
     }
@@ -143,7 +152,7 @@ export default function BindAddress({ onBack }) {
               绑定地址
             </Box>
             <Box fontSize="16px" color="white">请绑定您的钱包地址，领取红包</Box>
-            <Box fontSize="16px" color="white">当前地址：<Box as="span" textDecoration="underline">0x47B...D204E</Box></Box>
+            <Box fontSize="16px" color="white">当前地址：<Box as="span" textDecoration="underline">{toShortAddress(address || '')}</Box></Box>
           </Box>
           <Box display="flex" alignItems="center" justifyContent="space-between">
             <Box color="white" onClick={() => {}}>{``}</Box>

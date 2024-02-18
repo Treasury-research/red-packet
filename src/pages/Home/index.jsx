@@ -105,11 +105,12 @@ export default function Home() {
       const { amount, count, memo } = data
       const token = userInfo.token
       const redPacketId = userInfo.redPacketId
+      const userAddress = userInfo.address
       alert(redPacketId)
 
       const message = await api.sign({
         id: redPacketId,
-        address: `0xb864163E3491F7cabaBFbABAF94eF3034572594d`
+        address: userAddress
       }, {
         requireAuth: true,
         tokenFetcher: () => token
@@ -129,7 +130,7 @@ export default function Home() {
       const tx = await contract.claim(
         redPacketId,
         message,
-        `0xb864163E3491F7cabaBFbABAF94eF3034572594d`
+        userAddress
       );
 
       const receipt = await tx.wait();
