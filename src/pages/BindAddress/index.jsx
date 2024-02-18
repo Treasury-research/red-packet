@@ -62,7 +62,7 @@ export default function BindAddress({ onBack }) {
     } catch (error) {
       alert(error.message)
     }
-  }, [metamaskProvider])
+  }, [metamaskProvider, onBack])
 
   if (!isBind) {
     return (

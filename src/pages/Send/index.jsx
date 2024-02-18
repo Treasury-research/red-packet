@@ -160,7 +160,7 @@ export default function Send() {
         ];
         const contract = new ethers.Contract(address, abi, signer);
         const tx = await contract.create_red_packet(
-          1,
+          count,
           1,
           60 * 60 * 24,
           '0xb4ea3b98caa0037b5a71b6a10179f2be9f9f3c3e1ce6e2ab635c1e07169cbd49',
@@ -188,7 +188,7 @@ export default function Send() {
         ]
         const contract = new ethers.Contract(address, abi, signer)
         const tx = await contract.create_red_packet(
-          1,
+          count,
           1,
           60 * 60 * 24,
           '0xb4ea3b98caa0037b5a71b6a10179f2be9f9f3c3e1ce6e2ab635c1e07169cbd49',
