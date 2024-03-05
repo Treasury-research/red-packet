@@ -13,10 +13,17 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@metamask/sdk-react": "^0.14.2",
+    "@tma.js/sdk-react": "^1.1.2",
+    "ethers": "^6.10.0",
     "framer-motion": "^11.0.2",
+    "immer": "^10.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.3"
+    "react-hook-form": "^7.50.0",
+    "react-router-dom": "^6.21.3",
+    "react-vant": "^3.3.3",
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
