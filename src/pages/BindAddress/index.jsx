@@ -74,6 +74,12 @@ export default function BindAddress({ onBack }) {
     }
   }, [metamaskProvider, onBack])
 
+  useEffect(() => {
+    if (address) {
+      setIsBind(true)
+    }
+  }, [address])
+
   if (!isBind) {
     return (
       <Screen onBack={onBack}>
@@ -109,7 +115,7 @@ export default function BindAddress({ onBack }) {
               >
                 Connect your wallet now to confirm your ownership of a TypoX AI Fans NFT.
               </Box>
-              <Box fontSize="16px" color="white">请绑定您的钱包地址，领取红包</Box>
+              <Box fontSize="16px" color="white"></Box>
             </Box>
             <Box display="flex" alignItems="center" justifyContent="space-between">
               <Box color="white" onClick={() => {}}>{``}</Box>
@@ -161,7 +167,7 @@ export default function BindAddress({ onBack }) {
             >
               Connect your wallet now to confirm your ownership of a TypoX AI Fans NFT.
             </Box>
-            <Box fontSize="16px" color="white">请绑定您的钱包地址，领取红包</Box>
+            <Box fontSize="16px" color="white"></Box>
             <Box fontSize="16px" color="white">当前地址：<Box as="span" textDecoration="underline">{toShortAddress(address || '')}</Box></Box>
           </Box>
           <Box display="flex" alignItems="center" justifyContent="space-between">
