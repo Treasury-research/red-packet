@@ -126,7 +126,7 @@ export default function BindAddress({ onBack }) {
             </Box>
           </Box>
           <Box width="100%" marginBottom="40px" marginTop="auto">
-            <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={bindAddress} loading={isBinding} disabled={isBinding}>
+            <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={bindAddress} loading={isBinding} disabled={isBinding} opacity={(disabled || loading) ? '0.5' : '1'}>
               {isBinding ? 'Connecting' : 'Connect your Wallet'}
             </Button>
           </Box>
@@ -148,6 +148,7 @@ export default function BindAddress({ onBack }) {
           borderRadius="10px"
           padding="20px"
           marginTop="40px"
+          marginBottom="40px"
           background="linear-gradient(0deg, #1F2861 0%, #30486D 89.32%)"
         >
           <Box marginBottom="20px">
@@ -182,7 +183,7 @@ export default function BindAddress({ onBack }) {
           <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={() => {}} marginBottom="20px">
             修改地址
           </Button>
-          <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={() => setIsBind(false)} background="transparent" color="white" border="1px solid white">
+          <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={() => setIsBind(false)} background="transparent" color="white" border="1px solid white" _hover={{ color: 'white' }}>
             解除定绑
           </Button>
         </Box>
