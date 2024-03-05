@@ -42,7 +42,7 @@ export default function Screen({ children, onBack, title }) {
           alignItems="center"
           justifyContent="center"
         >
-          {title || `Digital gifts`}
+          {title || ``}
         </Box>
       </Box>
       <Box

@@ -97,7 +97,7 @@ export default function BindAddress({ onBack }) {
                 marginBottom="20px"
                 fontWeight="bold"
               >
-                绑定地址
+                Connect your wallet now to confirm your ownership of a TypoX AI Fans NFT.
               </Box>
               <Box fontSize="16px" color="white">请绑定您的钱包地址，领取红包</Box>
             </Box>
@@ -110,7 +110,7 @@ export default function BindAddress({ onBack }) {
           </Box>
           <Box width="100%" marginBottom="40px" marginTop="auto">
             <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={bindAddress}>
-              去绑定
+              Connect your Wallet
             </Button>
           </Box>
         </Box>
@@ -149,7 +149,7 @@ export default function BindAddress({ onBack }) {
               marginBottom="20px"
               fontWeight="bold"
             >
-              绑定地址
+              Connect your wallet now to confirm your ownership of a TypoX AI Fans NFT.
             </Box>
             <Box fontSize="16px" color="white">请绑定您的钱包地址，领取红包</Box>
             <Box fontSize="16px" color="white">当前地址：<Box as="span" textDecoration="underline">{toShortAddress(address || '')}</Box></Box>

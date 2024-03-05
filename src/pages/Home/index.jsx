@@ -150,30 +150,30 @@ export default function Home() {
     }
   }, [userInfo])
 
-  if (activePage === 'activityRules') {
-    return (
-      <ActivityRules onBack={() => setActivePage('home')} />
-    )
-  }
+  /* if (activePage === 'activityRules') {
+   *   return (
+   *     <ActivityRules onBack={() => setActivePage('home')} />
+   *   )
+   * } */
 
-  if (userInfo && userInfo.token && !userInfo.address) {
+  if (!isSignedIn) {
     return (
       <BindAddress onBack={() => setActivePage('home')} />
     )
   }
-
-  if (activePage === 'send') {
-    return (
-      <Send onBack={() => setActivePage('home')} />
-    )
-  }
-
-  if (activePage === 'history') {
-    return (
-      <History onBack={() => setActivePage('home')} />
-    )
-  }
-
+  /*
+   *   if (activePage === 'send') {
+   *     return (
+   *       <Send onBack={() => setActivePage('home')} />
+   *     )
+   *   }
+   *
+   *   if (activePage === 'history') {
+   *     return (
+   *       <History onBack={() => setActivePage('home')} />
+   *     )
+   *   }
+   *  */
   const disabled = isLogingIn
   const loading = isLogingIn
 
@@ -202,10 +202,10 @@ export default function Home() {
             color="white"
             marginBottom="20px"
           >
-            Send Digital gifts to your friends !
+            Sign in and Connect your MetaMask Wallet Address to Verify your ownership of a TypoX AI Fans NFT!
           </Box>
           <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Box color="white" cursor="pointer" onClick={() => setActivePage('activityRules')}>{`活动规则>`}</Box>
+            <Box color="white" cursor="pointer"></Box>
             <Box>
               <Image src={GiftImage} />
             </Box>
@@ -231,7 +231,7 @@ export default function Home() {
             </Button>
           </Box>
         )}
-        {!!isSignedIn && (intent === 'claim') && (
+        {!!isSignedIn && (intent === 'claim') && false && (
           <Box marginTop="auto">
             <Box width="100%" marginBottom="40px">
               <Button
@@ -247,7 +247,7 @@ export default function Home() {
             </Box>
           </Box>
         )}
-        {!!isSignedIn && (intent === 'send') && (
+        {!!isSignedIn && (intent === 'send') && false && (
           <Box marginTop="auto" marginBottom="20px">
             <Box width="100%" marginBottom="10px">
               <Button
