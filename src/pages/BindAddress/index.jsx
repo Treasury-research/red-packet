@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Box, Image, Button } from '@chakra-ui/react'
+import { Box, Image, Button, useToast } from '@chakra-ui/react'
 import LogoIcon from "@/components/Icons/Logo"
 import SignInIcon from "@/components/Icons/SignIn"
 import BackIcon from "@/components/Icons/Back"
@@ -25,6 +25,7 @@ export default function BindAddress({ onBack }) {
   const [isBind, setIsBind] = useState(false)
   const [signature, setSignature] = useState('')
   const { address } = userInfo
+  const toast = useToast();
 
   const bindAddress = useCallback(async () => {
     try {
