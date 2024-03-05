@@ -62,6 +62,12 @@ export default function BindAddress({ onBack }) {
 
       onBack()
       setIsBinding(false)
+      setIsBind(true)
+
+      toast({
+        status: 'success',
+        title: 'Bind Success!',
+      });
     } catch (error) {
       setIsBinding(false)
       alert(error.message)
