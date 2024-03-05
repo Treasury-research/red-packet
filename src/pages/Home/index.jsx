@@ -48,7 +48,7 @@ export default function Home() {
     const { startParam } = userInfo
 
     if (startParam) {
-      alert(`startParam:${startParam}`)
+      // alert(`startParam:${startParam}`)
       const params = startParam.split('_')
 
       if (params[0]) {
@@ -106,7 +106,7 @@ export default function Home() {
       const token = userInfo.token
       const redPacketId = userInfo.redPacketId
       const userAddress = userInfo.address
-      alert(redPacketId)
+      // alert(redPacketId)
 
       const message = await api.sign({
         id: redPacketId,
