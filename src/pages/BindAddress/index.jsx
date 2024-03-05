@@ -21,12 +21,14 @@ export const toShortAddress = (address, firstSlice = 6, lastSlice = 4) => {
 export default function BindAddress({ onBack }) {
   const { userInfo, updateUserInfo, getUserInfo } = useUserStore()
   const { provider: metamaskProvider, sdk } = useSDK()
+  const [isBinding, setIsBinding] = useState(false)
   const [isBind, setIsBind] = useState(false)
   const [signature, setSignature] = useState('')
   const { address } = userInfo
 
   const bindAddress = useCallback(async () => {
     try {
+      setIsBinding(true)
       const userInfo = getUserInfo()
       const accounts = await sdk.connect()
       const address = accounts[0]
@@ -59,7 +61,9 @@ export default function BindAddress({ onBack }) {
       })
 
       onBack()
+      setIsBinding(false)
     } catch (error) {
+      setIsBinding(false)
       alert(error.message)
     }
   }, [metamaskProvider, onBack])
@@ -109,8 +113,8 @@ export default function BindAddress({ onBack }) {
             </Box>
           </Box>
           <Box width="100%" marginBottom="40px" marginTop="auto">
-            <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={bindAddress}>
-              Connect your Wallet
+            <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={bindAddress} loading={isBinding} disabled={isBinding}>
+              {isBinding ? 'Connecting' : 'Connect your Wallet'}
             </Button>
           </Box>
         </Box>
