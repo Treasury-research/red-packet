@@ -72,7 +72,7 @@ export const apiCreator = (baseUrl, baseOptions = {}) => async (method = 'GET', 
 const responseTransformer = res => res.data
 const errorTransformer = res => Promise.reject({ message: res.message })
 
-const SERVER_URL = `https://knn3-gateway.knn3.xyz/tg-redpacket-backend-staging`
+const SERVER_URL = `https://knn3-gateway.knn3.xyz/tg-redpacket-backend`
 export const redPacketApi = apiCreator(`${SERVER_URL}/api/v1`, { responseTransformer, errorTransformer })
 
 export const login = (params = {}) => redPacketApi('POST', '/auth/login', params)
