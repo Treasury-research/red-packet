@@ -156,7 +156,7 @@ export default function Home() {
    *   )
    * } */
 
-  if (!isSignedIn) {
+  if (!!isSignedIn) {
     return (
       <BindAddress onBack={() => setActivePage('home')} />
     )
