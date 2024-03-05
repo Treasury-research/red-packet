@@ -50,7 +50,7 @@ export default function Home() {
           alignItems="center"
           justifyContent="center"
         >
-          Digital gifts
+
         </Box>
       </Box>
     </Box>
