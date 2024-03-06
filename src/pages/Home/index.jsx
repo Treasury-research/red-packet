@@ -185,6 +185,7 @@ export default function Home() {
         padding="32px"
         display="flex"
         flexDirection="column"
+        overflow="scroll"
         sx={{
           '::-webkit-scrollbar': {
             display:'none'

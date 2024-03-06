@@ -177,10 +177,10 @@ export default function BindAddress({ onBack }) {
               marginBottom="20px"
               fontWeight="bold"
             >
-              Connect your wallet now to confirm your ownership of a TypoX AI Fans NFT.
+              You have successfully connected to the address.
             </Box>
             <Box fontSize="16px" color="white"></Box>
-            <Box fontSize="16px" color="white">当前地址：<Box as="span" textDecoration="underline">{toShortAddress(address || '')}</Box></Box>
+            <Box fontSize="16px" color="white">Current Address: <Box as="span" textDecoration="underline">{toShortAddress(address || '')}</Box></Box>
           </Box>
           <Box display="flex" alignItems="center" justifyContent="space-between">
             <Box color="white" onClick={() => {}}>{``}</Box>
