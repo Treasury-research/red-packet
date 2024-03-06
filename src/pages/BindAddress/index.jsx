@@ -90,6 +90,11 @@ export default function BindAddress({ onBack }) {
           padding="32px"
           display="flex"
           flexDirection="column"
+          sx={{
+            '::-webkit-scrollbar': {
+              display:'none'
+            }
+          }}
         >
           <Box
             borderRadius="10px"
@@ -143,6 +148,11 @@ export default function BindAddress({ onBack }) {
         padding="32px"
         display="flex"
         flexDirection="column"
+        sx={{
+          '::-webkit-scrollbar': {
+            display:'none'
+          }
+        }}
       >
         <Box
           borderRadius="10px"

@@ -9,6 +9,11 @@ export default function Screen({ children, onBack, title }) {
       width="100%"
       height="100%"
       position="relative"
+      sx={{
+        '::-webkit-scrollbar': {
+          display:'none'
+        }
+      }}
     >
       <Box
         position="fixed"
