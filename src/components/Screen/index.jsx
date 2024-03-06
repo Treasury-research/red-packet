@@ -15,46 +15,51 @@ export default function Screen({ children, onBack, title }) {
         }
       }}
     >
-      <Box
-        position="fixed"
-        top="0"
-        left="0"
-        color="white"
-        width="100%"
-        height="44px"
-        zIndex="2"
-      >
-        {onBack && (
-          <Box
-            marginRight="auto"
-            onClick={onBack}
-            cursor="pointer"
-            position="absolute"
-            top="0"
-            left="32px"
-            height="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
+      {/* <Box
+          position="fixed"
+          top="0"
+          left="0"
+          color="white"
+          width="100%"
+          height="44px"
+          zIndex="2"
           >
-            <BackIcon />
+          {onBack && (
+          <Box
+          marginRight="auto"
+          onClick={onBack}
+          cursor="pointer"
+          position="absolute"
+          top="0"
+          left="32px"
+          height="100%"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          >
+          <BackIcon />
           </Box>
-        )}
-        <Box
+          )}
+          <Box
           width="100%"
           height="100%"
           display="flex"
           alignItems="center"
           justifyContent="center"
-        >
+          >
           {title || ``}
-        </Box>
-      </Box>
+          </Box>
+          </Box> */}
       <Box
         width="100%"
         height="100%"
-        marginTop="44px"
+        marginTop="0"
         overflowY="scroll"
+        sx={{
+          '::-webkit-scrollbar': {
+            display:'none'
+          }
+        }}
       >
         {children}
       </Box>
