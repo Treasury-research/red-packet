@@ -51,14 +51,14 @@ export default function BindAddress({ onBack }) {
         requireAuth: true,
         tokenFetcher: () => token
       })
-
-      const res3 = await api.getUserInfo({}, {
-        requireAuth: true,
-        tokenFetcher: () => token
-      })
-
+      /*
+       *       const res3 = await api.getUserInfo({}, {
+       *         requireAuth: true,
+       *         tokenFetcher: () => token
+       *       })
+       *  */
       updateUserInfo({
-        ...res3,
+        address,
       })
 
       onBack()
