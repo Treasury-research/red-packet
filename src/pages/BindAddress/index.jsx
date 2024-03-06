@@ -126,7 +126,7 @@ export default function BindAddress({ onBack }) {
             </Box>
           </Box>
           <Box width="100%" marginBottom="40px" marginTop="auto">
-            <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={bindAddress} loading={isBinding} disabled={isBinding} opacity={(disabled || loading) ? '0.5' : '1'}>
+            <Button width="100%" borderRadius="50px" height="50px" fontSize="16px" fontWeight="bold" onClick={bindAddress} loading={isBinding} disabled={isBinding} opacity={isBinding ? '0.5' : '1'}>
               {isBinding ? 'Connecting' : 'Connect your Wallet'}
             </Button>
           </Box>
